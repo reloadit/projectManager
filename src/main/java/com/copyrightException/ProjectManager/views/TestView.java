@@ -10,16 +10,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@SpringView(name = MainView.viewName)
-public class MainView extends VerticalLayout implements View {
+@SpringView(name = TestView.viewName)
+public class TestView extends VerticalLayout implements View {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MainView.class);
-    public static final String viewName = "";
+    public static final String viewName = "test";
+    private static final Logger LOG = LoggerFactory.getLogger(TestView.class);
     private final UserRepository userRepository;
     private Button bClickMe;
 
     @Autowired
-    public MainView(final UserRepository userRepository) {
+    public TestView(final UserRepository userRepository) {
         this.userRepository = userRepository;
         createComponents();
         initLayout();
