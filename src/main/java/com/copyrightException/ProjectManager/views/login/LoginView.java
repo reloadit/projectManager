@@ -1,7 +1,7 @@
 package com.copyrightException.ProjectManager.views.login;
 
 import com.copyrightException.ProjectManager.repositories.UserRepository;
-import com.copyrightException.ProjectManager.views.project.ProjectView;
+import com.copyrightException.ProjectManager.views.project.ProjectOverview;
 import com.copyrightException.ProjectManager.views.register.RegisterView;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
@@ -76,9 +76,9 @@ public class LoginView extends VerticalLayout implements View {
 
     private void onLogin() {
         System.out.println("onLogin");
-       // UI.getCurrent().getNavigator().navigateTo(ProjectView.VIEW_NAME);
+        UI.getCurrent().getNavigator().navigateTo(ProjectOverview.VIEW_NAME);
     }
-    
+
     private void onRegister() {
         System.out.println("onRegister");
         UI.getCurrent().getNavigator().navigateTo(RegisterView.VIEW_NAME);

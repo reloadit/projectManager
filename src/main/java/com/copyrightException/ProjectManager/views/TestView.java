@@ -1,6 +1,8 @@
 package com.copyrightException.ProjectManager.views;
 
+import com.copyrightException.ProjectManager.entities.Project;
 import com.copyrightException.ProjectManager.entities.User;
+import com.copyrightException.ProjectManager.repositories.ProjectRepository;
 import com.copyrightException.ProjectManager.repositories.UserRepository;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
@@ -16,11 +18,13 @@ public class TestView extends VerticalLayout implements View {
     public static final String viewName = "test";
     private static final Logger LOG = LoggerFactory.getLogger(TestView.class);
     private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
     private Button bClickMe;
 
     @Autowired
-    public TestView(final UserRepository userRepository) {
+    public TestView(final UserRepository userRepository, final ProjectRepository projectRepository) {
         this.userRepository = userRepository;
+        this.projectRepository = projectRepository;
         createComponents();
         initLayout();
         initUi();
@@ -39,9 +43,11 @@ public class TestView extends VerticalLayout implements View {
     }
 
     private void onClickMeClick() {
-        final User user = new User();
-        user.setName("Test User");
-        user.setPasswortHash("sdsd");
-        userRepository.save(user);
+        LOG.info("Creating project");
+        final Project project = new Project();
+        project.setName("TestProject");
+        final User user = userRepository.findAll().get(0);
+        project.setCreator(user);
+        projectRepository.save(project);
     }
 }
