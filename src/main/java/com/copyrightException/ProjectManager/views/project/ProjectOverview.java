@@ -2,6 +2,7 @@ package com.copyrightException.ProjectManager.views.project;
 
 import com.copyrightException.ProjectManager.entities.Project;
 import com.copyrightException.ProjectManager.repositories.ProjectRepository;
+import com.copyrightException.ProjectManager.views.project.components.ProjectCreationWindow;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
@@ -9,9 +10,9 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.ButtonRenderer;
-import com.vaadin.ui.themes.ValoTheme;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ public class ProjectOverview extends VerticalLayout implements View {
     private static final Logger LOG = LoggerFactory.getLogger(ProjectOverview.class);
     public static final String VIEW_NAME = "projectOveriew";
     private final ProjectOverviewPresenter presenter;
+    private Button bNewProject = new Button();
     private final Grid<Project> gProject = new Grid<>();
     private final ProjectRepository projectRepository;
 
@@ -37,17 +39,27 @@ public class ProjectOverview extends VerticalLayout implements View {
     public void init() {
         initGrid();
         initLayout();
+        initUi();
         presenter.setView(this);
     }
 
     private void initLayout() {
+        setSizeFull();
+        addComponent(bNewProject);
         addComponent(gProject);
     }
 
     private void initGrid() {
         gProject.addColumn(Project::getName).setCaption("Project");
         gProject.addColumn(project -> project.getCreator().getName()).setCaption("Creator");
-        gProject.addColumn(this::createButton, new ButtonRenderer()).setCaption("Open");
+        gProject.addColumn(p -> "Open", new ButtonRenderer(event -> openProject(event.getItem())))
+                .setCaption("Open");
+    }
+
+    private void initUi() {
+        bNewProject.setCaption("Create new project");
+        bNewProject.setIcon(VaadinIcons.PLUS_CIRCLE);
+        bNewProject.addClickListener(event -> showCreateProjectWindow());
     }
 
     public void setProjects(final List<Project> projects) {
@@ -59,16 +71,21 @@ public class ProjectOverview extends VerticalLayout implements View {
         presenter.onViewEnter();
     }
 
-    private Button createButton(final Project project) {
-        final Button button = new Button();
-        button.addClickListener(event -> openProject(project));
-        button.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-        button.setIcon(VaadinIcons.ARROW_CIRCLE_RIGHT);
-        return button;
+    private void openProject(final Object obj) {
+        LOG.info("openProject clicked");
+        if (obj instanceof Project) {
+            final Project project = (Project) obj;
+            LOG.info(String.format("opening: %s", project.getName()));
+        }
     }
 
-    private void openProject(final Project project) {
-        LOG.info("openProject clicked");
+    private void showCreateProjectWindow() {
+        LOG.info("onCreateProject");
+        final ProjectCreationWindow window = new ProjectCreationWindow(presenter::onCreateProject);
+        window.center();
+        window.setModal(true);
+        window.setVisible(true);
+        UI.getCurrent().addWindow(window);
     }
 
 }

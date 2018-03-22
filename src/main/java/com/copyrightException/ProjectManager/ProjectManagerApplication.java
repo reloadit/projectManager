@@ -9,7 +9,6 @@ import com.vaadin.ui.UI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringUI
@@ -21,14 +20,11 @@ public class ProjectManagerApplication extends UI {
     @Autowired
     private SpringViewProvider viewProvider;
 
-    public static void main(String[] args) {
-        SpringApplication.run(ProjectManagerApplication.class, args);
-    }
-
     @Override
     protected void init(VaadinRequest request) {
         final Navigator navigator = new Navigator(this, this);
         navigator.addProvider(viewProvider);
         setNavigator(navigator);
+        setErrorHandler(new ExcceptionHandler());
     }
 }
