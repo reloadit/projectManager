@@ -129,19 +129,19 @@ public class RegisterView extends VerticalLayout implements View {
         System.out.println("onRegister");
 
         if (tfName.isEmpty()) {
-            lErrorName.setVisible(tfName.isEmpty());
+            lErrorName.setVisible(true);
             lErrorName.setValue("please enter a username");
             return;
         }
 
         if (pfPassword.isEmpty()) {
-            lErrorPassword.setVisible(pfPassword.isEmpty());
+            lErrorPassword.setVisible(true);
             lErrorPassword.setValue("please enter a password");
             return;
         }
 
         if (pfRepeatPassword.isEmpty()) {
-            lErrorPasswordRepeat.setVisible(pfRepeatPassword.isEmpty());
+            lErrorPasswordRepeat.setVisible(true);
             lErrorPasswordRepeat.setValue("please repeat your password");
             return;
         }
@@ -153,7 +153,7 @@ public class RegisterView extends VerticalLayout implements View {
         }
 
         if (!userRepository.findByName(tfName.getValue()).isEmpty()) {
-            lErrorName.setVisible(tfName.isEmpty());
+            lErrorName.setVisible(true);
             lErrorName.setValue("this username already exists");
             return;
         }

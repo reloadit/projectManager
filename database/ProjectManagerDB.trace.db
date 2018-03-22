@@ -1,0 +1,12 @@
+2018-03-22 15:11:11 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLException: Syntax Fehler in SQL Befehl "DROP USER [*]"; erwartet "identifier"
+Syntax error in SQL statement "DROP USER [*]"; expected "identifier"; SQL statement:
+drop USER [42001-196]
+2018-03-22 15:11:17 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLException: Syntax Fehler in SQL Befehl "DROP USER[*]"; erwartet "identifier"
+Syntax error in SQL statement "DROP USER[*]"; expected "identifier"; SQL statement:
+DROP USER [42001-196]
+2018-03-22 15:11:21 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLException: Syntax Fehler in SQL Befehl "DROP USER *[*]"; erwartet "identifier"
+Syntax error in SQL statement "DROP USER *[*]"; expected "identifier"; SQL statement:
+DROP USER * [42001-196]
