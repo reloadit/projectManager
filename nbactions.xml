@@ -17,7 +17,7 @@
         <action>
             <actionName>debug</actionName>
             <packagings>
-                <packaging>jar</packaging>
+                <packaging>jar</packaging>  
             </packagings>
             <goals>
                 <goal>process-classes</goal>
