@@ -3,12 +3,11 @@ package com.copyrightException.ProjectManager.views.project;
 import com.copyrightException.ProjectManager.entities.Project;
 import com.copyrightException.ProjectManager.repositories.ProjectRepository;
 import com.copyrightException.ProjectManager.views.project.components.ProjectCreationWindow;
+import com.copyrightException.ProjectManager.views.project.components.ProjectOverviewHeader;
 import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -25,7 +24,7 @@ public class ProjectOverview extends VerticalLayout implements View {
     private static final Logger LOG = LoggerFactory.getLogger(ProjectOverview.class);
     public static final String VIEW_NAME = "projectOveriew";
     private final ProjectOverviewPresenter presenter;
-    private Button bNewProject = new Button();
+    private final ProjectOverviewHeader header = new ProjectOverviewHeader();
     private final Grid<Project> gProject = new Grid<>();
     private final ProjectRepository projectRepository;
 
@@ -45,8 +44,10 @@ public class ProjectOverview extends VerticalLayout implements View {
 
     private void initLayout() {
         setSizeFull();
-        addComponent(bNewProject);
+        addComponent(header);
         addComponent(gProject);
+        setExpandRatio(gProject, 1f);
+        gProject.setSizeFull();
     }
 
     private void initGrid() {
@@ -57,9 +58,7 @@ public class ProjectOverview extends VerticalLayout implements View {
     }
 
     private void initUi() {
-        bNewProject.setCaption("Create new project");
-        bNewProject.setIcon(VaadinIcons.PLUS_CIRCLE);
-        bNewProject.addClickListener(event -> showCreateProjectWindow());
+      header.setCreateProjectCallback(this::showCreateProjectWindow);
     }
 
     public void setProjects(final List<Project> projects) {

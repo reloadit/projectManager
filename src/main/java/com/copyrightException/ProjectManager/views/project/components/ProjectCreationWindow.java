@@ -38,17 +38,24 @@ public class ProjectCreationWindow extends Window {
         final HorizontalLayout buttonLayout = new HorizontalLayout(bCreateProject, bCancel);
         final VerticalLayout layout = new VerticalLayout(formLayout, buttonLayout);
         layout.setComponentAlignment(buttonLayout, Alignment.MIDDLE_RIGHT);
-
+        layout.setWidthUndefined();
+        buttonLayout.setWidthUndefined();
+        formLayout.setWidthUndefined();
+        this.setWidthUndefined();
         this.setContent(layout);
     }
 
     private void initUi() {
+        tfProjectName.setCaption("Project name");
+        
         bCreateProject.setCaption("Create");
         bCreateProject.addStyleName(ValoTheme.BUTTON_PRIMARY);
         bCreateProject.addClickListener(event -> onCreateProject());
 
         bCancel.setCaption("Cancel");
         bCancel.addClickListener(event -> onCancel());
+        
+        this.setResizable(false);
     }
 
     private void initBinder() {
