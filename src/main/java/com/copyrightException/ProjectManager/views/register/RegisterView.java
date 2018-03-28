@@ -1,20 +1,24 @@
 package com.copyrightException.ProjectManager.views.register;
 
+import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.entities.User;
 import com.copyrightException.ProjectManager.repositories.UserRepository;
 import com.copyrightException.ProjectManager.views.login.LoginView;
-import com.vaadin.data.HasValue;
-import com.vaadin.data.HasValue.ValueChangeListener;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +33,7 @@ public class RegisterView extends VerticalLayout implements View {
     private static final Logger LOG = LoggerFactory.getLogger(RegisterView.class);
     private final UserRepository userRepository;
     private Button bRegister, bBack;
-    private Label lNameTitle, lPasswordTitle, lRepeatPasswordTitle, lErrorName, lErrorPassword, lErrorPasswordRepeat;
+    private Label lNameTitle, lPasswordTitle, lRepeatPasswordTitle;
     private TextField tfName;
     private PasswordField pfPassword, pfRepeatPassword;
 
@@ -51,42 +55,18 @@ public class RegisterView extends VerticalLayout implements View {
         bBack = new Button("Back");
         bRegister = new Button("Register");
 
+        bBack.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        bRegister.addStyleName(ValoTheme.BUTTON_PRIMARY);
+
+        bBack.setIcon(VaadinIcons.ARROW_LEFT);
+        //bRegister.setIcon(VaadinIcons.ARROW_RIGHT);
+
         tfName.setPlaceholder("enter here");
         pfPassword.setPlaceholder("enter here");
         pfRepeatPassword.setPlaceholder("enter here");
 
-        tfName.addValueChangeListener(new ValueChangeListener() {
-            @Override
-            public void valueChange(HasValue.ValueChangeEvent event) {
-                lErrorName.setVisible(false);
-            }
-        });
-        pfPassword.addValueChangeListener(new ValueChangeListener() {
-            @Override
-            public void valueChange(HasValue.ValueChangeEvent event) {
-                lErrorPassword.setVisible(false);
-            }
-        });
-        pfRepeatPassword.addValueChangeListener(new ValueChangeListener() {
-            @Override
-            public void valueChange(HasValue.ValueChangeEvent event) {
-                lErrorPasswordRepeat.setVisible(false);
-            }
-        });
-
-        lErrorName = new Label();
-        lErrorPassword = new Label();
-        lErrorPasswordRepeat = new Label();
-
-        lErrorName.setVisible(false);
-        lErrorPassword.setVisible(false);
-        lErrorPasswordRepeat.setVisible(false);
-
         bBack.setSizeFull();
         bRegister.setSizeFull();
-        lErrorName.setSizeFull();
-        lErrorPassword.setSizeFull();
-        lErrorPasswordRepeat.setSizeFull();
     }
 
     private void initLayout() {
@@ -104,14 +84,8 @@ public class RegisterView extends VerticalLayout implements View {
         grid.addComponent(pfRepeatPassword, 1, 3);
         grid.addComponent(bRegister, 1, 5);
 
-        grid.addComponent(lErrorName, 2, 1);
-        grid.setComponentAlignment(lErrorName, Alignment.MIDDLE_CENTER);
-        grid.addComponent(lErrorPassword, 2, 2);
-        grid.setComponentAlignment(lErrorPassword, Alignment.MIDDLE_CENTER);
-        grid.addComponent(lErrorPasswordRepeat, 2, 3);
-        grid.setComponentAlignment(lErrorPasswordRepeat, Alignment.MIDDLE_CENTER);
-
         addComponent(grid);
+        setSizeFull();
         setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
     }
 
@@ -129,46 +103,34 @@ public class RegisterView extends VerticalLayout implements View {
         System.out.println("onRegister");
 
         if (tfName.isEmpty()) {
-            lErrorName.setVisible(true);
-            lErrorName.setValue("please enter a username");
+            Helper.displayErrorMessage("Empty Username", "Please enter a username", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
             return;
         }
 
         if (pfPassword.isEmpty()) {
-            lErrorPassword.setVisible(true);
-            lErrorPassword.setValue("please enter a password");
+            Helper.displayErrorMessage("Empty Password", "Please enter a password", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
             return;
         }
 
         if (pfRepeatPassword.isEmpty()) {
-            lErrorPasswordRepeat.setVisible(true);
-            lErrorPasswordRepeat.setValue("please repeat your password");
+            Helper.displayErrorMessage("Empty Password", "Please repeat your password", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
             return;
         }
 
         if (!pfPassword.getValue().equals(pfRepeatPassword.getValue())) {
-            lErrorPasswordRepeat.setVisible(true);
-            lErrorPasswordRepeat.setValue("the passwords don't match");
+            Helper.displayErrorMessage("Passwords Unequal", "The passwords don`t match", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
             return;
         }
 
         if (!userRepository.findByName(tfName.getValue()).isEmpty()) {
-            lErrorName.setVisible(true);
-            lErrorName.setValue("this username already exists");
+            Helper.displayErrorMessage("Username Unavailable", "This username already exists", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
             return;
         }
-
-        lErrorName.setVisible(true);
-        lErrorPassword.setVisible(true);
-        lErrorPasswordRepeat.setVisible(true);
-
         User user = new User();
         user.setName(tfName.getValue());
 
         SHA3.DigestSHA3 digestSHA3 = new SHA3.Digest512();
         byte[] hashedPW = digestSHA3.digest(pfPassword.getValue().getBytes());
-
-        System.out.println("SHA3-512 = " + Hex.toHexString(hashedPW));
 
         user.setPasswortHash(Hex.toHexString(hashedPW));
         userRepository.save(user);
