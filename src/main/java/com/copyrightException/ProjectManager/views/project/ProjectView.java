@@ -1,16 +1,20 @@
 package com.copyrightException.ProjectManager.views.project;
 
 import com.copyrightException.ProjectManager.entities.Project;
-import com.copyrightException.ProjectManager.entities.Slot;
 import com.copyrightException.ProjectManager.repositories.ProjectRepository;
 import com.copyrightException.ProjectManager.repositories.SlotRepository;
 import com.copyrightException.ProjectManager.repositories.TaskRepository;
 import com.copyrightException.ProjectManager.repositories.UserRepository;
+import com.copyrightException.ProjectManager.views.project.components.SlotComponent;
+import com.copyrightException.ProjectManager.views.project.components.SlotCreationWindow;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
@@ -18,7 +22,6 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +35,8 @@ public class ProjectView extends VerticalLayout implements View {
 
     private final Label laProjectName = new Label();
     private final Panel paHeader = new Panel();
-    private final Panel paSlots = new Panel();
+    private final HorizontalLayout layoutSlots = new HorizontalLayout();
+    private final Button bAddSlot = new Button();
 
     private final ProjectPresenter presenter;
 
@@ -56,7 +60,7 @@ public class ProjectView extends VerticalLayout implements View {
         final HorizontalLayout layout = new HorizontalLayout();
         layout.addComponent(laProjectName);
         paHeader.setContent(layout);
-        
+
         laProjectName.setCaption("Project name:");
         laProjectName.addStyleName(ValoTheme.LABEL_HUGE);
         laProjectName.addStyleName(ValoTheme.LABEL_BOLD);
@@ -67,11 +71,15 @@ public class ProjectView extends VerticalLayout implements View {
         setSizeFull();
         paHeader.setWidth("100%");
         addComponent(paHeader);
-        addComponent(paSlots);
+        addComponent(layoutSlots);
+        setExpandRatio(layoutSlots, 1);
+        layoutSlots.setHeight("100%");
     }
 
     private void initUi() {
-
+        bAddSlot.setIcon(VaadinIcons.PLUS);
+        bAddSlot.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+        bAddSlot.addClickListener(event -> addSlot());
     }
 
     @Override
@@ -94,10 +102,19 @@ public class ProjectView extends VerticalLayout implements View {
 
     public void setProject(final Project project) {
         laProjectName.setValue(project.getName());
+        layoutSlots.removeAllComponents();
+        project.getSlots().forEach(slot -> {
+            layoutSlots.addComponent(new SlotComponent(slot, presenter, presenter));
+        });
+        layoutSlots.addComponent(bAddSlot);
+        layoutSlots.setComponentAlignment(bAddSlot, Alignment.MIDDLE_CENTER);
     }
 
-    public void setSlots(final List<Slot> slots) {
-
+    private void addSlot() {
+        final SlotCreationWindow window = new SlotCreationWindow(slot -> presenter.addSlot(slot));
+        window.center();
+        window.setModal(true);
+        window.setVisible(true);
+        UI.getCurrent().addWindow(window);
     }
-
 }

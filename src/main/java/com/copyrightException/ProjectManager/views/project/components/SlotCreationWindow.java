@@ -1,6 +1,6 @@
 package com.copyrightException.ProjectManager.views.project.components;
 
-import com.copyrightException.ProjectManager.entities.Project;
+import com.copyrightException.ProjectManager.entities.Slot;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.validator.StringLengthValidator;
@@ -18,16 +18,16 @@ import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ProjectCreationWindow extends Window {
+public class SlotCreationWindow extends Window {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProjectCreationWindow.class);
     private final Button bCreateProject = new Button();
     private final Button bCancel = new Button();
-    private final TextField tfProjectName = new TextField();
-    private final Consumer<Project> createProjectCallBack;
-    private final Binder<Project> binder = new Binder();
+    private final TextField tfSlotName = new TextField();
+    private final Consumer<Slot> createProjectCallBack;
+    private final Binder<Slot> binder = new Binder();
 
-    public ProjectCreationWindow(final Consumer<Project> createProjectCallBack) {
+    public SlotCreationWindow(final Consumer<Slot> createProjectCallBack) {
         super("Create project");
         this.createProjectCallBack = createProjectCallBack;
         initLayout();
@@ -36,7 +36,7 @@ public class ProjectCreationWindow extends Window {
     }
 
     private void initLayout() {
-        final FormLayout formLayout = new FormLayout(tfProjectName);
+        final FormLayout formLayout = new FormLayout(tfSlotName);
         final HorizontalLayout buttonLayout = new HorizontalLayout(bCreateProject, bCancel);
         final VerticalLayout layout = new VerticalLayout(formLayout, buttonLayout);
         layout.setComponentAlignment(buttonLayout, Alignment.MIDDLE_RIGHT);
@@ -48,7 +48,7 @@ public class ProjectCreationWindow extends Window {
     }
 
     private void initUi() {
-        tfProjectName.setCaption("Project name");
+        tfSlotName.setCaption("Slot name");
 
         bCreateProject.setCaption("Create");
         bCreateProject.addStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -57,25 +57,25 @@ public class ProjectCreationWindow extends Window {
         bCancel.setCaption("Cancel");
         bCancel.addClickListener(event -> onCancel());
 
-        tfProjectName.addShortcutListener(new ShortcutListener("Create project", ShortcutAction.KeyCode.ENTER, null) {
+        tfSlotName.addShortcutListener(new ShortcutListener("Create slot", ShortcutAction.KeyCode.ENTER, null) {
             @Override
             public void handleAction(Object sender, Object target) {
                 onCreateProject();
             }
         });
-        tfProjectName.focus();
+        tfSlotName.focus();
 
         this.setResizable(false);
     }
 
     private void initBinder() {
-        binder.forField(tfProjectName)
-                .withValidator(new StringLengthValidator("Project name must be between 1 and 255 characters long", 1, 255))
-                .bind(Project::getName, Project::setName);
+        binder.forField(tfSlotName)
+                .withValidator(new StringLengthValidator("Slot name must be between 1 and 255 characters long", 1, 255))
+                .bind(Slot::getName, Slot::setName);
     }
 
     private void onCreateProject() {
-        final Project project = new Project();
+        final Slot project = new Slot();
         try {
             binder.writeBean(project);
             createProjectCallBack.accept(project);

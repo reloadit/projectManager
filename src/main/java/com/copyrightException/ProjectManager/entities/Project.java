@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -34,18 +35,18 @@ public class Project {
         return name;
     }
 
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project", fetch=FetchType.EAGER)
     public List<Slot> getSlots() {
         return slots;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", nullable = true)
     public User getCreator() {
         return creator;
     }
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
     @JoinTable(
             name = "Project_User",
             joinColumns = {
