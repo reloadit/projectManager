@@ -4,6 +4,8 @@ import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.entities.User;
 import com.copyrightException.ProjectManager.repositories.UserRepository;
 import com.copyrightException.ProjectManager.views.login.LoginView;
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.event.ShortcutListener;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Page;
@@ -59,11 +61,31 @@ public class RegisterView extends VerticalLayout implements View {
         bRegister.addStyleName(ValoTheme.BUTTON_PRIMARY);
 
         bBack.setIcon(VaadinIcons.ARROW_LEFT);
-        //bRegister.setIcon(VaadinIcons.ARROW_RIGHT);
 
         tfName.setPlaceholder("enter here");
         pfPassword.setPlaceholder("enter here");
         pfRepeatPassword.setPlaceholder("enter here");
+
+        tfName.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
+            @Override
+            public void handleAction(Object sender, Object target) {
+                onRegister();
+            }
+        });
+
+        pfPassword.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
+            @Override
+            public void handleAction(Object sender, Object target) {
+                onRegister();
+            }
+        });
+
+        pfRepeatPassword.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
+            @Override
+            public void handleAction(Object sender, Object target) {
+                onRegister();
+            }
+        });
 
         bBack.setSizeFull();
         bRegister.setSizeFull();
@@ -73,15 +95,15 @@ public class RegisterView extends VerticalLayout implements View {
         GridLayout grid = new GridLayout(4, 6);
         grid.setSpacing(true);
         grid.addComponent(bBack, 1, 0);
-        grid.addComponent(lNameTitle, 0, 1); //-> (x, y)
+        grid.addComponent(lNameTitle, 0, 2); //-> (x, y)
         grid.setComponentAlignment(lNameTitle, Alignment.MIDDLE_CENTER);
-        grid.addComponent(tfName, 1, 1);
-        grid.addComponent(lPasswordTitle, 0, 2);
+        grid.addComponent(tfName, 1, 2);
+        grid.addComponent(lPasswordTitle, 0, 3);
         grid.setComponentAlignment(lPasswordTitle, Alignment.MIDDLE_CENTER);
-        grid.addComponent(pfPassword, 1, 2);
-        grid.addComponent(lRepeatPasswordTitle, 0, 3);
+        grid.addComponent(pfPassword, 1, 3);
+        grid.addComponent(lRepeatPasswordTitle, 0, 4);
         grid.setComponentAlignment(lRepeatPasswordTitle, Alignment.MIDDLE_CENTER);
-        grid.addComponent(pfRepeatPassword, 1, 3);
+        grid.addComponent(pfRepeatPassword, 1, 4);
         grid.addComponent(bRegister, 1, 5);
 
         addComponent(grid);

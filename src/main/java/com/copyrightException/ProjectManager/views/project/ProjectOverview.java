@@ -2,6 +2,7 @@ package com.copyrightException.ProjectManager.views.project;
 
 import com.copyrightException.ProjectManager.entities.Project;
 import com.copyrightException.ProjectManager.repositories.ProjectRepository;
+import com.copyrightException.ProjectManager.views.project.components.Header;
 import com.copyrightException.ProjectManager.views.project.components.ProjectCreationWindow;
 import com.copyrightException.ProjectManager.views.project.components.ProjectOverviewHeader;
 import com.vaadin.data.provider.ListDataProvider;
@@ -22,9 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ProjectOverview extends VerticalLayout implements View {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProjectOverview.class);
-    public static final String VIEW_NAME = "projectOveriew";
+    public static final String VIEW_NAME = "projectOverview";
     private final ProjectOverviewPresenter presenter;
-    private final ProjectOverviewHeader header = new ProjectOverviewHeader();
+    private final ProjectOverviewHeader projectOverviewHeader = new ProjectOverviewHeader();
+    private final Header header = new Header();
     private final Grid<Project> gProject = new Grid<>();
     private final ProjectRepository projectRepository;
 
@@ -45,6 +47,7 @@ public class ProjectOverview extends VerticalLayout implements View {
     private void initLayout() {
         setSizeFull();
         addComponent(header);
+        addComponent(projectOverviewHeader);
         addComponent(gProject);
         setExpandRatio(gProject, 1f);
         gProject.setSizeFull();
@@ -58,7 +61,7 @@ public class ProjectOverview extends VerticalLayout implements View {
     }
 
     private void initUi() {
-        header.setCreateProjectCallback(this::showCreateProjectWindow);
+        projectOverviewHeader.setCreateProjectCallback(this::showCreateProjectWindow);
     }
 
     public void setProjects(final List<Project> projects) {

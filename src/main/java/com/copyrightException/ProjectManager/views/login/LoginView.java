@@ -60,14 +60,14 @@ public class LoginView extends VerticalLayout implements View {
         tfName.setPlaceholder("enter here");
         pfPassword.setPlaceholder("enter here");
 
-        tfName.addShortcutListener(new ShortcutListener("Shortcut Name", ShortcutAction.KeyCode.ENTER, null) {
+        tfName.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
             @Override
             public void handleAction(Object sender, Object target) {
                 onLogin();
             }
         });
 
-        pfPassword.addShortcutListener(new ShortcutListener("Shortcut Name", ShortcutAction.KeyCode.ENTER, null) {
+        pfPassword.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
             @Override
             public void handleAction(Object sender, Object target) {
                 onLogin();
