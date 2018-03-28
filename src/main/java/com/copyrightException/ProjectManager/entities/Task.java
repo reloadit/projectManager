@@ -2,6 +2,7 @@ package com.copyrightException.ProjectManager.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -40,13 +41,13 @@ public class Task {
         return description;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", nullable = true)
     public User getAssignedUser() {
         return assignedUser;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "slotId", nullable = false)
     public Slot getSlot() {
         return slot;
