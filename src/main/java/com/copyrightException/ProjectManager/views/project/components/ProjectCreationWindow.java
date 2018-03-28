@@ -4,6 +4,8 @@ import com.copyrightException.ProjectManager.entities.Project;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.validator.StringLengthValidator;
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
@@ -47,14 +49,22 @@ public class ProjectCreationWindow extends Window {
 
     private void initUi() {
         tfProjectName.setCaption("Project name");
-        
+
         bCreateProject.setCaption("Create");
         bCreateProject.addStyleName(ValoTheme.BUTTON_PRIMARY);
         bCreateProject.addClickListener(event -> onCreateProject());
 
         bCancel.setCaption("Cancel");
         bCancel.addClickListener(event -> onCancel());
-        
+
+        tfProjectName.addShortcutListener(new ShortcutListener("Create project", ShortcutAction.KeyCode.ENTER, null) {
+            @Override
+            public void handleAction(Object sender, Object target) {
+                onCreateProject();
+            }
+        });
+        tfProjectName.focus();
+
         this.setResizable(false);
     }
 
