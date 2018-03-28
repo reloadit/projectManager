@@ -1,5 +1,6 @@
 package com.copyrightException.ProjectManager.views.project;
 
+import com.copyrightException.ProjectManager.entities.Project;
 import com.copyrightException.ProjectManager.repositories.ProjectRepository;
 import com.copyrightException.ProjectManager.repositories.SlotRepository;
 import com.copyrightException.ProjectManager.repositories.TaskRepository;
@@ -12,6 +13,7 @@ public class ProjectPresenter {
     private final TaskRepository taskRepository;
     private final ProjectRepository projectRepository;
     private ProjectView view;
+    private Project project;
 
     public ProjectPresenter(
             final ProjectRepository projectRepository,
@@ -28,4 +30,17 @@ public class ProjectPresenter {
         this.view = view;
     }
 
+    public void onEnter(final String projectId) {
+        if (projectId != null) {
+            final Project project = projectRepository.findFirstById(projectId);
+            if (project == null) {
+                view.projectNotFound();
+            } else {
+                this.project = project;
+                view.setProject(project);
+            }
+        } else {
+            view.projectNotFound();
+        }
+    }
 }

@@ -58,7 +58,7 @@ public class ProjectOverview extends VerticalLayout implements View {
     }
 
     private void initUi() {
-      header.setCreateProjectCallback(this::showCreateProjectWindow);
+        header.setCreateProjectCallback(this::showCreateProjectWindow);
     }
 
     public void setProjects(final List<Project> projects) {
@@ -75,6 +75,8 @@ public class ProjectOverview extends VerticalLayout implements View {
         if (obj instanceof Project) {
             final Project project = (Project) obj;
             LOG.info(String.format("opening: %s", project.getName()));
+            final String projectId = project.getId();
+            UI.getCurrent().getNavigator().navigateTo(ProjectView.VIEW_NAME + "/project=" + projectId);
         }
     }
 
