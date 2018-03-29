@@ -133,6 +133,11 @@ public class RegisterView extends VerticalLayout implements View {
             Helper.displayErrorMessage("Empty Password", "Please enter a password", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
             return;
         }
+        
+        if (pfPassword.getValue().length() < 10) {
+            Helper.displayErrorMessage("Password Length Insufficient", "Please enter a password with at least 10 characters", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
+            return;
+        }
 
         if (pfRepeatPassword.isEmpty()) {
             Helper.displayErrorMessage("Empty Password", "Please repeat your password", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());

@@ -32,7 +32,7 @@ public class Header extends Panel {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate currentDate = LocalDate.now();
 
-        lName = new Label("Hello, " + ownUser.getName());
+        lName = new Label("Hello, " + ownUser.getName() + "!");
         lDate = new Label(dtf.format(currentDate));
         bLogout = new Button("Logout");
 
@@ -42,10 +42,10 @@ public class Header extends Panel {
     }
 
     private void initLayout() {
-        final GridLayout layout = new GridLayout(5, 1);
+        final GridLayout layout = new GridLayout(4, 1);
         layout.setSpacing(true);
-        layout.addComponent(lName, 1, 0);
-        layout.addComponent(lDate, 2, 0);
+        layout.addComponent(lName, 0, 0);
+        layout.addComponent(lDate, 1, 0);
         layout.addComponent(bLogout, 3, 0);
         layout.setComponentAlignment(lName, Alignment.MIDDLE_CENTER);
         layout.setComponentAlignment(lDate, Alignment.MIDDLE_CENTER);
