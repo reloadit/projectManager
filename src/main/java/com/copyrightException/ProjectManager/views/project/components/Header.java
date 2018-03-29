@@ -4,6 +4,7 @@ import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.entities.User;
 import com.copyrightException.ProjectManager.views.login.LoginView;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
@@ -48,11 +49,13 @@ public class Header extends Panel {
         layout.addComponent(lDate, 1, 0);
         layout.addComponent(bLogout, 3, 0);
         layout.setComponentAlignment(lName, Alignment.MIDDLE_CENTER);
-        layout.setComponentAlignment(lDate, Alignment.MIDDLE_CENTER);
-        layout.setComponentAlignment(bLogout, Alignment.MIDDLE_CENTER);
+        layout.setComponentAlignment(lDate, Alignment.MIDDLE_LEFT);
+        layout.setComponentAlignment(bLogout, Alignment.MIDDLE_RIGHT);
+        layout.setMargin(new MarginInfo(false, true, false, true));
 
         setContent(layout);
         layout.setSizeFull();
+        layout.setHeight("60px");
     }
 
     private void initUi() {
