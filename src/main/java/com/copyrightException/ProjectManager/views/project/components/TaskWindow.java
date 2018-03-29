@@ -64,7 +64,7 @@ public class TaskWindow extends Window {
     }
 
     private void initUi(final List<User> users) {
-        tfName.setCaption("Slot name");
+        tfName.setCaption("Task name");
         tfDescription.setCaption("Description");
         cbAssignedUser.setCaption("Assigned user");
         bSave.setCaption(create

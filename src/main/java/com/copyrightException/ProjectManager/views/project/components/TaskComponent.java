@@ -29,6 +29,7 @@ public class TaskComponent extends Panel {
     private void initLayout() {
         final HorizontalLayout nameLayout = new HorizontalLayout(laName, bEdit, bDelete);
         nameLayout.setExpandRatio(laName, 1);
+        nameLayout.setWidth("100%");
         final VerticalLayout layout = new VerticalLayout(nameLayout, ladescription, laUser);
         setContent(layout);
 
@@ -39,6 +40,7 @@ public class TaskComponent extends Panel {
         bEdit.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         bEdit.addStyleName(ValoTheme.BUTTON_SMALL);
         bEdit.addClickListener(event -> taskChangeListener.editTask(task));
+
         bDelete.setIcon(VaadinIcons.MINUS_CIRCLE);
         bDelete.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         bDelete.addStyleName(ValoTheme.BUTTON_DANGER);

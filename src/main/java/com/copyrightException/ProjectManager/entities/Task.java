@@ -47,7 +47,7 @@ public class Task {
         return assignedUser;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     @JoinColumn(name = "slotId", nullable = false)
     public Slot getSlot() {
         return slot;

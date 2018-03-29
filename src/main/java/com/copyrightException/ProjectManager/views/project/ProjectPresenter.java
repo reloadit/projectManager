@@ -60,12 +60,16 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
         slot.setTasks(new ArrayList<>());
         project.getSlots().add(slot);
         view.setProject(project);
+        slotRepository.saveAndFlush(slot);
+        fireChangeEvent();
     }
 
     @Override
     public void nameChanged(Slot slot, String name) {
         slot.setName(name);
         view.setProject(project);
+        slotRepository.saveAndFlush(slot);
+        fireChangeEvent();
     }
 
     @Override
@@ -76,6 +80,9 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
             slots.get(i).setPosition(i);
         }
         view.setProject(project);
+        taskRepository.deleteInBatch(slot.getTasks());
+        slotRepository.delete(slot);
+        fireChangeEvent();
     }
 
     @Override
@@ -88,14 +95,17 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
             t.setSlot(slot);
             slot.getTasks().add(t);
             view.setProject(project);
+            taskRepository.saveAndFlush(t);
+            fireChangeEvent();
         });
     }
 
     @Override
     public void editTask(Task task) {
-        final Slot slot = task.getSlot();
         view.showAddTaskDialog(false, task, project.getUsers(), t -> {
             view.setProject(project);
+            taskRepository.saveAndFlush(t);
+            fireChangeEvent();
         });
     }
 
@@ -107,6 +117,11 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
             tasks.get(i).setPosition(i);
         }
         view.setProject(project);
+        taskRepository.delete(task);
+        fireChangeEvent();
     }
 
+    private void fireChangeEvent() {
+
+    }
 }
