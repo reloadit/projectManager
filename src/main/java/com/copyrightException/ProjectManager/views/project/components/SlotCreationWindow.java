@@ -20,16 +20,16 @@ import org.slf4j.LoggerFactory;
 
 public class SlotCreationWindow extends Window {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ProjectCreationWindow.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SlotCreationWindow.class);
     private final Button bCreateProject = new Button();
     private final Button bCancel = new Button();
     private final TextField tfSlotName = new TextField();
-    private final Consumer<Slot> createProjectCallBack;
+    private final Consumer<Slot> createSlotCallback;
     private final Binder<Slot> binder = new Binder();
 
-    public SlotCreationWindow(final Consumer<Slot> createProjectCallBack) {
-        super("Create project");
-        this.createProjectCallBack = createProjectCallBack;
+    public SlotCreationWindow(final Consumer<Slot> createSlotCallback) {
+        super("Create slot");
+        this.createSlotCallback = createSlotCallback;
         initLayout();
         initUi();
         initBinder();
@@ -78,7 +78,7 @@ public class SlotCreationWindow extends Window {
         final Slot project = new Slot();
         try {
             binder.writeBean(project);
-            createProjectCallBack.accept(project);
+            createSlotCallback.accept(project);
             this.close();
         } catch (ValidationException ex) {
             LOG.error("Validation exception");

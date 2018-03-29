@@ -57,8 +57,10 @@ public class SlotComponent extends Panel {
         bRemove.setIcon(VaadinIcons.MINUS_CIRCLE);
         bRemove.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         bRemove.addStyleName(ValoTheme.BUTTON_SMALL);
+        bRemove.addStyleName(ValoTheme.BUTTON_DANGER);
         bAdd.setIcon(VaadinIcons.PLUS);
         bAdd.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+        bAdd.addClickListener(event -> onAddTask());
         laName.setValue(slot.getName());
         setWidth("300px");
         setHeight("100%");
@@ -71,11 +73,17 @@ public class SlotComponent extends Panel {
     private void onSlotNameChanged(final String name) {
         slotChangedCallback.nameChanged(slot, name);
     }
+    
+    private void onAddTask(){
+        slotChangedCallback.addNewTask(slot);
+    }
 
     public static interface SlotChangeListener {
 
         public void removeSlot(final Slot slot);
 
         public void nameChanged(final Slot slot, final String name);
+
+        public void addNewTask(final Slot slot);
     }
 }

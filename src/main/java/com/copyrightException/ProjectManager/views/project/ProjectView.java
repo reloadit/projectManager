@@ -1,12 +1,15 @@
 package com.copyrightException.ProjectManager.views.project;
 
 import com.copyrightException.ProjectManager.entities.Project;
+import com.copyrightException.ProjectManager.entities.Task;
+import com.copyrightException.ProjectManager.entities.User;
 import com.copyrightException.ProjectManager.repositories.ProjectRepository;
 import com.copyrightException.ProjectManager.repositories.SlotRepository;
 import com.copyrightException.ProjectManager.repositories.TaskRepository;
 import com.copyrightException.ProjectManager.repositories.UserRepository;
 import com.copyrightException.ProjectManager.views.project.components.SlotComponent;
 import com.copyrightException.ProjectManager.views.project.components.SlotCreationWindow;
+import com.copyrightException.ProjectManager.views.project.components.TaskWindow;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -22,6 +25,8 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import java.util.List;
+import java.util.function.Consumer;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,6 +117,18 @@ public class ProjectView extends VerticalLayout implements View {
 
     private void addSlot() {
         final SlotCreationWindow window = new SlotCreationWindow(slot -> presenter.addSlot(slot));
+        window.center();
+        window.setModal(true);
+        window.setVisible(true);
+        UI.getCurrent().addWindow(window);
+    }
+
+    public void showAddTaskDialog(
+            final boolean create,
+            final Task task,
+            final List<User> users,
+            final Consumer<Task> callback) {
+        final TaskWindow window = new TaskWindow(create, task, callback, users);
         window.center();
         window.setModal(true);
         window.setVisible(true);

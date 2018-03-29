@@ -2,6 +2,7 @@ package com.copyrightException.ProjectManager.views.project;
 
 import com.copyrightException.ProjectManager.entities.Project;
 import com.copyrightException.ProjectManager.entities.Slot;
+import com.copyrightException.ProjectManager.entities.Task;
 import com.copyrightException.ProjectManager.repositories.ProjectRepository;
 import com.copyrightException.ProjectManager.repositories.SlotRepository;
 import com.copyrightException.ProjectManager.repositories.TaskRepository;
@@ -73,6 +74,37 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
         slots.remove(slot);
         for (int i = 0; i < slots.size(); i++) {
             slots.get(i).setPosition(i);
+        }
+        view.setProject(project);
+    }
+
+    @Override
+    public void addNewTask(Slot slot) {
+        final Task task = new Task();
+        task.setName("");
+        task.setDescription("");
+        view.showAddTaskDialog(true, task, project.getUsers(), t -> {
+            t.setPosition(slot.getTasks().size());
+            t.setSlot(slot);
+            slot.getTasks().add(t);
+            view.setProject(project);
+        });
+    }
+
+    @Override
+    public void editTask(Task task) {
+        final Slot slot = task.getSlot();
+        view.showAddTaskDialog(false, task, project.getUsers(), t -> {
+            view.setProject(project);
+        });
+    }
+
+    @Override
+    public void deleteTask(Task task) {
+        final List<Task> tasks = task.getSlot().getTasks();
+        tasks.remove(task);
+        for (int i = 0; i < tasks.size(); i++) {
+            tasks.get(i).setPosition(i);
         }
         view.setProject(project);
     }
