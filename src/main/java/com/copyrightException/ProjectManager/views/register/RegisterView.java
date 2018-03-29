@@ -117,12 +117,12 @@ public class RegisterView extends VerticalLayout implements View {
     }
 
     private void onBack() {
-        System.out.println("onBack");
+        LOG.info("onBack");
         UI.getCurrent().getNavigator().navigateTo(LoginView.VIEW_NAME);
     }
 
     private void onRegister() {
-        System.out.println("onRegister");
+        LOG.info("onRegister");
 
         if (tfName.isEmpty()) {
             Helper.displayErrorMessage("Empty Username", "Please enter a username", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
@@ -133,7 +133,7 @@ public class RegisterView extends VerticalLayout implements View {
             Helper.displayErrorMessage("Empty Password", "Please enter a password", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
             return;
         }
-        
+
         if (pfPassword.getValue().length() < 10) {
             Helper.displayErrorMessage("Password Length Insufficient", "Please enter a password with at least 10 characters", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
             return;

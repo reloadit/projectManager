@@ -14,6 +14,8 @@ public class User {
 
     private String id;
     private String name;
+    private String firstName;
+    private String lastName;
     private String passwortHash;
     private List<Project> projects;
 
@@ -43,6 +45,16 @@ public class User {
         return projects;
     }
 
+    @Column(name = "firstName")
+    public String getFirstName() {
+        return firstName;
+    }
+
+    @Column(name = "lastName")
+    public String getLastName() {
+        return lastName;
+    }
+
     public void setProjects(List<Project> projects) {
         this.projects = projects;
     }
@@ -53,6 +65,14 @@ public class User {
 
     public void setPasswortHash(String passwortHash) {
         this.passwortHash = passwortHash;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
 }

@@ -2,6 +2,7 @@ package com.copyrightException.ProjectManager.views.project;
 
 import com.copyrightException.ProjectManager.entities.Project;
 import com.copyrightException.ProjectManager.repositories.ProjectRepository;
+import com.copyrightException.ProjectManager.repositories.UserRepository;
 import com.copyrightException.ProjectManager.views.project.components.Header;
 import com.copyrightException.ProjectManager.views.project.components.ProjectCreationWindow;
 import com.copyrightException.ProjectManager.views.project.components.ProjectOverviewHeader;
@@ -26,14 +27,17 @@ public class ProjectOverview extends VerticalLayout implements View {
     public static final String VIEW_NAME = "projectOverview";
     private final ProjectOverviewPresenter presenter;
     private final ProjectOverviewHeader projectOverviewHeader = new ProjectOverviewHeader();
-    private final Header header = new Header();
+    private final Header header;
     private final Grid<Project> gProject = new Grid<>();
     private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ProjectOverview(final ProjectRepository projectRepository) {
-        presenter = new ProjectOverviewPresenter(projectRepository);
+    public ProjectOverview(final ProjectRepository projectRepository, final UserRepository userRepository) {
+        presenter = new ProjectOverviewPresenter(projectRepository, userRepository);
+        header = new Header(presenter);
         this.projectRepository = projectRepository;
+        this.userRepository = userRepository;
     }
 
     @PostConstruct

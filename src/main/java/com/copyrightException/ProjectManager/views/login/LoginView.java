@@ -101,6 +101,7 @@ public class LoginView extends VerticalLayout implements View {
     }
 
     private void onLogin() {
+        LOG.info("onLogin");
         if (tfName.isEmpty()) {
             Helper.displayErrorMessage("Empty Username", "Please enter a username", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
             return;
@@ -133,6 +134,8 @@ public class LoginView extends VerticalLayout implements View {
     }
 
     private void onRegister() {
+        LOG.info("onRegister");
         UI.getCurrent().getNavigator().navigateTo(RegisterView.VIEW_NAME);
     }
+
 }
