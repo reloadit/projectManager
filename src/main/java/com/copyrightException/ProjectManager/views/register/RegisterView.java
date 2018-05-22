@@ -36,7 +36,7 @@ public class RegisterView extends VerticalLayout implements View {
     private final UserRepository userRepository;
     private Button bRegister, bBack;
     private Label lUsernameTitle, lFirstNameTitle, lLastNameTitle, lPasswordTitle, lRepeatPasswordTitle;
-    private TextField tfUsername;
+    private TextField tfUserName;
     private TextField tfFirstname = new TextField();
     private TextField tfLastname = new TextField();
     private PasswordField pfPassword, pfRepeatPassword;
@@ -50,7 +50,7 @@ public class RegisterView extends VerticalLayout implements View {
     }
 
     private void createComponents() {
-        tfUsername = new TextField();
+        tfUserName = new TextField();
         tfFirstname = new TextField();
         tfLastname = new TextField();
         
@@ -64,19 +64,19 @@ public class RegisterView extends VerticalLayout implements View {
         bBack = new Button("Back");
         bRegister = new Button("Register");
         
-        tfUsername.focus();
+        tfUserName.focus();
 
         bRegister.addStyleName(ValoTheme.BUTTON_PRIMARY);
 
         bBack.setIcon(VaadinIcons.ARROW_LEFT);
 
-        tfUsername.setPlaceholder("enter here");
+        tfUserName.setPlaceholder("enter here");
         tfFirstname.setPlaceholder("enter here");
         tfLastname.setPlaceholder("enter here");
         pfPassword.setPlaceholder("enter here");
         pfRepeatPassword.setPlaceholder("enter here");
 
-        tfUsername.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
+        tfUserName.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
             @Override
             public void handleAction(Object sender, Object target) {
                 onRegister();
@@ -125,7 +125,7 @@ public class RegisterView extends VerticalLayout implements View {
         grid.setComponentAlignment(lUsernameTitle, Alignment.MIDDLE_RIGHT);
         grid.setComponentAlignment(lFirstNameTitle, Alignment.MIDDLE_RIGHT);
         grid.setComponentAlignment(lLastNameTitle, Alignment.MIDDLE_RIGHT);
-        grid.addComponent(tfUsername, 1, 2);
+        grid.addComponent(tfUserName, 1, 2);
         grid.addComponent(tfFirstname, 1, 3);
         grid.addComponent(tfLastname, 1, 4);
         grid.addComponent(lPasswordTitle, 0, 5);
@@ -154,7 +154,7 @@ public class RegisterView extends VerticalLayout implements View {
     private void onRegister() {
         LOG.info("onRegister");
 
-        if (tfUsername.isEmpty()) {
+        if (tfUserName.isEmpty()) {
             Helper.displayErrorMessage("Empty Username", "Please enter a username", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
             return;
         }
@@ -189,12 +189,12 @@ public class RegisterView extends VerticalLayout implements View {
             return;
         }
 
-        if (!userRepository.findByName(tfUsername.getValue()).isEmpty()) {
+        if (!userRepository.findByName(tfUserName.getValue()).isEmpty()) {
             Helper.displayErrorMessage("Username Unavailable", "This username already exists", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
             return;
         }
         User user = new User();
-        user.setName(tfUsername.getValue());
+        user.setName(tfUserName.getValue());
         user.setFirstName(tfFirstname.getValue());
         user.setLastName(tfLastname.getValue());
 

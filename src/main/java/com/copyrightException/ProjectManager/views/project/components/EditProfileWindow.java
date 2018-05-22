@@ -3,14 +3,19 @@ package com.copyrightException.ProjectManager.views.project.components;
 import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.entities.User;
 import com.vaadin.data.Binder;
+import com.vaadin.data.HasValue;
 import com.vaadin.data.ValidationException;
-import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -24,25 +29,25 @@ public class EditProfileWindow extends Window {
     private static final Logger LOG = LoggerFactory.getLogger(EditProfileWindow.class);
     private final Button bSave = new Button();
     private final Button bCancel = new Button();
-    private final TextField tfUserName = new TextField();
-    private final TextField tfFirstname = new TextField();
-    private final TextField tfLastname = new TextField();
-    private final TextField tfUserPasswordOld = new TextField();
-    private final TextField tfUserPasswordNew = new TextField();
-    private final TextField tfUserPasswordNewRepeat = new TextField();
+    private TextField tfUserName;
+    private TextField tfFirstname;
+    private TextField tfLastname;
+    private CheckBox changePwCheckbox;
+    private PasswordField pfUserPasswordOld;
+    private PasswordField pfUserPasswordNew;
+    private PasswordField pfUserPasswordNewRepeat;
     private final Consumer<User> saveUserProfileCallBack;
     private final Binder<User> binder = new Binder();
 
     public EditProfileWindow(final Consumer<User> saveUserProfileCallBack) {
         super("Edit User Profile");
         this.saveUserProfileCallBack = saveUserProfileCallBack;
-        initLayout();
         initUi();
-        initBinder();
+        initLayout();
     }
 
     private void initLayout() {
-        final FormLayout formLayout = new FormLayout(tfUserName, tfFirstname, tfLastname, tfUserPasswordOld, tfUserPasswordNew, tfUserPasswordNewRepeat);
+        final FormLayout formLayout = new FormLayout(tfUserName, tfFirstname, tfLastname, changePwCheckbox, pfUserPasswordOld, pfUserPasswordNew, pfUserPasswordNewRepeat);
         final HorizontalLayout buttonLayout = new HorizontalLayout(bSave, bCancel);
         final VerticalLayout layout = new VerticalLayout(formLayout, buttonLayout);
         layout.setComponentAlignment(buttonLayout, Alignment.MIDDLE_RIGHT);
@@ -54,12 +59,21 @@ public class EditProfileWindow extends Window {
     }
 
     private void initUi() {
+        changePwCheckbox = new CheckBox();
+        tfUserName = new TextField();
+        tfFirstname = new TextField();
+        tfLastname = new TextField();
+        pfUserPasswordOld = new PasswordField();
+        pfUserPasswordNew = new PasswordField();
+        pfUserPasswordNewRepeat = new PasswordField();
+
+        changePwCheckbox.setCaption("Change Password");
         tfUserName.setCaption("User name:");
         tfFirstname.setCaption("First name:");
         tfLastname.setCaption("Last name:");
-        tfUserPasswordOld.setCaption("Old password:");
-        tfUserPasswordNew.setCaption("New password:");
-        tfUserPasswordNewRepeat.setCaption("Repeat new password");
+        pfUserPasswordOld.setCaption("Old password:");
+        pfUserPasswordNew.setCaption("New password:");
+        pfUserPasswordNewRepeat.setCaption("Repeat new password:");
 
         bSave.setCaption("Save");
         bSave.addStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -81,7 +95,8 @@ public class EditProfileWindow extends Window {
         }
 
         tfUserName.focus();
-
+        
+     
         tfUserName.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
             @Override
             public void handleAction(Object sender, Object target) {
@@ -100,19 +115,19 @@ public class EditProfileWindow extends Window {
                 onSaveProfile();
             }
         });
-        tfUserPasswordOld.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
+        pfUserPasswordOld.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
             @Override
             public void handleAction(Object sender, Object target) {
                 onSaveProfile();
             }
         });
-        tfUserPasswordNew.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
+        pfUserPasswordNew.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
             @Override
             public void handleAction(Object sender, Object target) {
                 onSaveProfile();
             }
         });
-        tfUserPasswordNewRepeat.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
+        pfUserPasswordNewRepeat.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
             @Override
             public void handleAction(Object sender, Object target) {
                 onSaveProfile();
@@ -122,18 +137,50 @@ public class EditProfileWindow extends Window {
         this.setResizable(false);
     }
 
-    private void initBinder() {
-        binder.forField(tfUserName)
-                .withValidator(new StringLengthValidator("Project name must be between 1 and 16 characters long", 1, 16))
-                .bind(User::getName, User::setName);
-        binder.forField(tfFirstname)
-                .bind(User::getFirstName, User::setFirstName);
-        binder.forField(tfLastname)
-                .bind(User::getLastName, User::setLastName);
-        //TODO bind password fieds
-    }
-
     private void onSaveProfile() {
+
+        if (tfUserName.isEmpty()) {
+            Helper.displayErrorMessage("Empty Username", "Please enter a username", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
+            return;
+        }
+
+        if (tfFirstname.isEmpty()) {
+            Helper.displayErrorMessage("Empty First name", "Please enter a first name", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
+            return;
+        }
+
+        if (tfLastname.isEmpty()) {
+            Helper.displayErrorMessage("Empty Last name", "Please enter a last name", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
+            return;
+        }
+
+        if (pfUserPasswordOld.isEmpty()) {
+            Helper.displayErrorMessage("Empty Password", "Please enter your old password", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
+            return;
+        }
+
+        /*
+        if (pfPassword.getValue().length() < 10) {
+            Helper.displayErrorMessage("Password Length Insufficient", "Please enter a password with at least 10 characters", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
+            return;
+        }
+
+        if (pfRepeatPassword.isEmpty()) {
+            Helper.displayErrorMessage("Empty Password", "Please repeat your password", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
+            return;
+        }
+
+        if (!pfPassword.getValue().equals(pfRepeatPassword.getValue())) {
+            Helper.displayErrorMessage("Passwords Unequal", "The passwords don`t match", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
+            return;
+        }
+
+        if (!userRepository.findByName(tfUserName.getValue()).isEmpty()) {
+            Helper.displayErrorMessage("Username Unavailable", "This username already exists", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
+            return;
+        }
+        */
+
         final User user = new User();
         try {
             binder.writeBean(user);
