@@ -59,6 +59,8 @@ public class LoginView extends VerticalLayout implements View {
 
         tfName.setPlaceholder("enter here");
         pfPassword.setPlaceholder("enter here");
+        
+        tfName.focus();
 
         tfName.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
             @Override

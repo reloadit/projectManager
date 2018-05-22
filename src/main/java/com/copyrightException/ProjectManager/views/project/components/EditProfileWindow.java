@@ -1,5 +1,6 @@
 package com.copyrightException.ProjectManager.views.project.components;
 
+import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.entities.User;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
@@ -53,11 +54,11 @@ public class EditProfileWindow extends Window {
     }
 
     private void initUi() {
-        tfUserName.setCaption("User name");
-        tfFirstname.setCaption("First name");
-        tfLastname.setCaption("Last name");
-        tfUserPasswordOld.setCaption("Old name");
-        tfUserPasswordNew.setCaption("New name");
+        tfUserName.setCaption("User name:");
+        tfFirstname.setCaption("First name:");
+        tfLastname.setCaption("Last name:");
+        tfUserPasswordOld.setCaption("Old password:");
+        tfUserPasswordNew.setCaption("New password:");
         tfUserPasswordNewRepeat.setCaption("Repeat new password");
 
         bSave.setCaption("Save");
@@ -66,6 +67,18 @@ public class EditProfileWindow extends Window {
 
         bCancel.setCaption("Cancel");
         bCancel.addClickListener(event -> onCancel());
+
+        User u = Helper.getUser();
+
+        if (u.getName() != null) {
+            tfUserName.setValue(u.getName());
+        }
+        if (u.getFirstName() != null) {
+            tfFirstname.setValue(u.getFirstName());
+        }
+        if (u.getLastName() != null) {
+            tfLastname.setValue(u.getLastName());
+        }
 
         tfUserName.focus();
 
