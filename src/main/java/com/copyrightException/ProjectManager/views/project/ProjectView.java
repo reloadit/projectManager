@@ -7,6 +7,7 @@ import com.copyrightException.ProjectManager.repositories.ProjectRepository;
 import com.copyrightException.ProjectManager.repositories.SlotRepository;
 import com.copyrightException.ProjectManager.repositories.TaskRepository;
 import com.copyrightException.ProjectManager.repositories.UserRepository;
+import com.copyrightException.ProjectManager.views.project.components.Header;
 import com.copyrightException.ProjectManager.views.project.components.SlotComponent;
 import com.copyrightException.ProjectManager.views.project.components.SlotCreationWindow;
 import com.copyrightException.ProjectManager.views.project.components.TaskWindow;
@@ -42,6 +43,7 @@ public class ProjectView extends VerticalLayout implements View {
     private final Panel paHeader = new Panel();
     private final HorizontalLayout layoutSlots = new HorizontalLayout();
     private final Button bAddSlot = new Button();
+    private final Header header;
 
     private final ProjectPresenter presenter;
 
@@ -52,6 +54,7 @@ public class ProjectView extends VerticalLayout implements View {
             final TaskRepository taskRepository,
             final UserRepository userRepository) {
         presenter = new ProjectPresenter(projectRepository, slotRepository, taskRepository, userRepository);
+        this.header = new Header(userRepository::saveAndFlush);
     }
 
     @PostConstruct
@@ -76,6 +79,7 @@ public class ProjectView extends VerticalLayout implements View {
         initHeaderLayout();
         setSizeFull();
         paHeader.setWidth("100%");
+        addComponent(header);
         addComponent(paHeader);
         addComponent(layoutSlots);
         setExpandRatio(layoutSlots, 1);
@@ -110,7 +114,8 @@ public class ProjectView extends VerticalLayout implements View {
         laProjectName.setValue(project.getName());
         layoutSlots.removeAllComponents();
         project.getSlots().forEach(slot -> {
-            layoutSlots.addComponent(new SlotComponent(slot, presenter, presenter));
+            final SlotComponent component = new SlotComponent(slot, presenter, presenter);
+            layoutSlots.addComponent(component);
         });
         layoutSlots.addComponent(bAddSlot);
         layoutSlots.setComponentAlignment(bAddSlot, Alignment.MIDDLE_CENTER);

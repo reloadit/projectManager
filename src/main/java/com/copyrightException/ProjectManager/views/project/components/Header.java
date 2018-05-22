@@ -16,6 +16,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,11 +25,11 @@ public class Header extends Panel {
     private static final Logger LOG = LoggerFactory.getLogger(ProjectOverview.class);
     private Button bEditProfile, bLogout;
     private Label lName, lDate;
-    private final ProjectOverviewPresenter presenter;
+    private final Consumer<User> userChangeCallback;
     
-    public Header(ProjectOverviewPresenter presenter) {
+    public Header( Consumer<User>  userChangeCallback) {
         super();
-        this.presenter = presenter;
+        this.userChangeCallback = userChangeCallback;
         createComponents();
         initLayout();
         initUi();
@@ -77,7 +78,7 @@ public class Header extends Panel {
 
     private void onEditProfile() {
         LOG.info("onEditProfile");
-        final EditProfileWindow window = new EditProfileWindow(presenter::onEditUserProfile);
+        final EditProfileWindow window = new EditProfileWindow(userChangeCallback);
         window.center();
         window.setModal(true);
         window.setVisible(true);

@@ -35,7 +35,7 @@ public class ProjectOverview extends VerticalLayout implements View {
     @Autowired
     public ProjectOverview(final ProjectRepository projectRepository, final UserRepository userRepository) {
         presenter = new ProjectOverviewPresenter(projectRepository, userRepository);
-        header = new Header(presenter);
+        header = new Header(presenter::onEditUserProfile);
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
     }
