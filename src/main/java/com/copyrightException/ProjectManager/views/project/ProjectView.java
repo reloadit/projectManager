@@ -63,6 +63,7 @@ public class ProjectView extends VerticalLayout implements View {
 
     private void initHeaderLayout() {
         final HorizontalLayout layout = new HorizontalLayout();
+        layout.setMargin(true);
         layout.addComponent(laProjectName);
         paHeader.setContent(layout);
 

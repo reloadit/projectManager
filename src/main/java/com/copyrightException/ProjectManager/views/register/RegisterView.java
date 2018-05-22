@@ -57,7 +57,6 @@ public class RegisterView extends VerticalLayout implements View {
         bBack = new Button("Back");
         bRegister = new Button("Register");
 
-        bBack.addStyleName(ValoTheme.BUTTON_PRIMARY);
         bRegister.addStyleName(ValoTheme.BUTTON_PRIMARY);
 
         bBack.setIcon(VaadinIcons.ARROW_LEFT);

@@ -55,7 +55,7 @@ public class LoginView extends VerticalLayout implements View {
         bRegister = new Button("Not registered yet?");
 
         bLogin.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        bRegister.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        bRegister.addStyleName(ValoTheme.BUTTON_QUIET);
 
         tfName.setPlaceholder("enter here");
         pfPassword.setPlaceholder("enter here");
