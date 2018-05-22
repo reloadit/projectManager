@@ -44,6 +44,7 @@ public class EditProfileWindow extends Window {
         this.saveUserProfileCallBack = saveUserProfileCallBack;
         initUi();
         initLayout();
+        togglePasswordFields();
     }
 
     private void initLayout() {
@@ -95,8 +96,14 @@ public class EditProfileWindow extends Window {
         }
 
         tfUserName.focus();
-        
-     
+
+        changePwCheckbox.addValueChangeListener(new HasValue.ValueChangeListener<Boolean>() {
+            @Override
+            public void valueChange(HasValue.ValueChangeEvent<Boolean> event) {
+                togglePasswordFields();
+            }
+        });
+
         tfUserName.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
             @Override
             public void handleAction(Object sender, Object target) {
@@ -137,6 +144,12 @@ public class EditProfileWindow extends Window {
         this.setResizable(false);
     }
 
+    private void togglePasswordFields() {
+        pfUserPasswordOld.setEnabled(changePwCheckbox.getValue());
+        pfUserPasswordNew.setEnabled(changePwCheckbox.getValue());
+        pfUserPasswordNewRepeat.setEnabled(changePwCheckbox.getValue());
+    }
+
     private void onSaveProfile() {
 
         if (tfUserName.isEmpty()) {
@@ -159,27 +172,22 @@ public class EditProfileWindow extends Window {
             return;
         }
 
-        /*
-        if (pfPassword.getValue().length() < 10) {
-            Helper.displayErrorMessage("Password Length Insufficient", "Please enter a password with at least 10 characters", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
-            return;
-        }
+        if (changePwCheckbox.getValue()) {
+            if (pfUserPasswordOld.getValue().length() < 10) {
+                Helper.displayErrorMessage("Password Length Insufficient", "Please enter a password with at least 10 characters", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
+                return;
+            }
 
-        if (pfRepeatPassword.isEmpty()) {
-            Helper.displayErrorMessage("Empty Password", "Please repeat your password", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
-            return;
-        }
+            if (pfUserPasswordOld.isEmpty()) {
+                Helper.displayErrorMessage("Empty Password", "Please repeat your password", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
+                return;
+            }
 
-        if (!pfPassword.getValue().equals(pfRepeatPassword.getValue())) {
-            Helper.displayErrorMessage("Passwords Unequal", "The passwords don`t match", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
-            return;
+            if (!pfUserPasswordOld.getValue().equals(pfUserPasswordOld.getValue())) {
+                Helper.displayErrorMessage("Passwords Unequal", "The passwords don`t match", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
+                return;
+            }
         }
-
-        if (!userRepository.findByName(tfUserName.getValue()).isEmpty()) {
-            Helper.displayErrorMessage("Username Unavailable", "This username already exists", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
-            return;
-        }
-        */
 
         final User user = new User();
         try {
