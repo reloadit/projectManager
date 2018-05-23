@@ -21,6 +21,8 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 import java.util.function.Consumer;
+import org.bouncycastle.jcajce.provider.digest.SHA3;
+import org.bouncycastle.util.encoders.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +39,7 @@ public class EditProfileWindow extends Window {
     private PasswordField pfUserPasswordNew;
     private PasswordField pfUserPasswordNewRepeat;
     private final Consumer<User> saveUserProfileCallBack;
-    private final Binder<User> binder = new Binder();
+    private User u;
 
     public EditProfileWindow(final Consumer<User> saveUserProfileCallBack) {
         super("Edit User Profile");
@@ -83,7 +85,7 @@ public class EditProfileWindow extends Window {
         bCancel.setCaption("Cancel");
         bCancel.addClickListener(event -> onCancel());
 
-        User u = Helper.getUser();
+        u = Helper.getUser();
 
         if (u.getName() != null) {
             tfUserName.setValue(u.getName());
@@ -167,36 +169,44 @@ public class EditProfileWindow extends Window {
             return;
         }
 
-        if (pfUserPasswordOld.isEmpty()) {
-            Helper.displayErrorMessage("Empty Password", "Please enter your old password", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
-            return;
-        }
-
         if (changePwCheckbox.getValue()) {
-            if (pfUserPasswordOld.getValue().length() < 10) {
-                Helper.displayErrorMessage("Password Length Insufficient", "Please enter a password with at least 10 characters", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
+
+            //check if old pw is correct
+            SHA3.DigestSHA3 digestSHA3 = new SHA3.Digest512();
+            byte[] enteredHashedPW = digestSHA3.digest(pfUserPasswordOld.getValue().getBytes());
+            if (!Hex.toHexString(enteredHashedPW).equals(u.getPasswortHash())) {
+                Helper.displayErrorMessage("Wrong Password", "Please enter the correct current password", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
                 return;
             }
 
-            if (pfUserPasswordOld.isEmpty()) {
+            if (pfUserPasswordNew.getValue().length() < 10) {
+                Helper.displayErrorMessage("New Password Length Insufficient", "Please enter a password with at least 10 characters", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
+                return;
+            }
+
+            if (pfUserPasswordNewRepeat.isEmpty()) {
                 Helper.displayErrorMessage("Empty Password", "Please repeat your password", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
                 return;
             }
 
-            if (!pfUserPasswordOld.getValue().equals(pfUserPasswordOld.getValue())) {
+            if (!pfUserPasswordNew.getValue().equals(pfUserPasswordNewRepeat.getValue())) {
                 Helper.displayErrorMessage("Passwords Unequal", "The passwords don`t match", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
                 return;
             }
         }
 
-        final User user = new User();
-        try {
-            binder.writeBean(user);
-            saveUserProfileCallBack.accept(user);
-            this.close();
-        } catch (ValidationException ex) {
-            LOG.error("Validation exception");
+        //TODO > update user instead of creating new one
+        u.setName(tfUserName.getValue());
+        u.setFirstName(tfFirstname.getValue());
+        u.setLastName(tfLastname.getValue());
+
+        if (changePwCheckbox.getValue()) {
+            SHA3.DigestSHA3 digestSHA3 = new SHA3.Digest512();
+            byte[] hashedPW = digestSHA3.digest(pfUserPasswordNew.getValue().getBytes());
+            u.setPasswortHash(Hex.toHexString(hashedPW));
         }
+
+        saveUserProfileCallBack.accept(u);
     }
 
     private void onCancel() {
