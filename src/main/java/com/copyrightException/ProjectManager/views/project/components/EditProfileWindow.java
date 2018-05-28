@@ -207,6 +207,10 @@ public class EditProfileWindow extends Window {
         }
 
         saveUserProfileCallBack.accept(u);
+
+        this.close();
+
+        Helper.displayErrorMessage("Updated user successful", "The user \"" + u.getName() + "\" has been updated successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
     }
 
     private void onCancel() {

@@ -53,7 +53,7 @@ public class RegisterView extends VerticalLayout implements View {
         tfUserName = new TextField();
         tfFirstname = new TextField();
         tfLastname = new TextField();
-        
+
         lUsernameTitle = new Label("Username:");
         lFirstNameTitle = new Label("First name:");
         lLastNameTitle = new Label("Last name:");
@@ -63,7 +63,7 @@ public class RegisterView extends VerticalLayout implements View {
         pfRepeatPassword = new PasswordField();
         bBack = new Button("Back");
         bRegister = new Button("Register");
-        
+
         tfUserName.focus();
 
         bRegister.addStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -203,7 +203,9 @@ public class RegisterView extends VerticalLayout implements View {
 
         user.setPasswortHash(Hex.toHexString(hashedPW));
         userRepository.save(user);
+
         UI.getCurrent().getNavigator().navigateTo(LoginView.VIEW_NAME);
+        Helper.displayErrorMessage("Registration successful", "The Registration for the user \"" + user.getName() + "\" has been successful", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
     }
 
 }
