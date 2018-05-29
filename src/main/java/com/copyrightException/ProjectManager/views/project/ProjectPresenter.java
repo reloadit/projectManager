@@ -90,7 +90,7 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
         final Task task = new Task();
         task.setName("");
         task.setDescription("");
-        view.showAddTaskDialog(true, task, project.getUsers(), t -> {
+        view.showAddTaskDialog(true, task, userRepository.findAll(), t -> {
             t.setPosition(slot.getTasks().size());
             t.setSlot(slot);
             slot.getTasks().add(t);
@@ -102,7 +102,7 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
 
     @Override
     public void editTask(Task task) {
-        view.showAddTaskDialog(false, task, project.getUsers(), t -> {
+        view.showAddTaskDialog(false, task, userRepository.findAll(), t -> {
             view.setProject(project);
             taskRepository.saveAndFlush(t);
             fireChangeEvent();

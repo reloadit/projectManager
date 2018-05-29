@@ -45,6 +45,7 @@ public class TaskWindow extends Window {
         this.taskCallback = createProjectCallBack;
         this.task = task;
         this.create = create;
+        cbAssignedUser.setItems(users);
         initLayout();
         initUi(users);
         initBinder();
@@ -67,6 +68,7 @@ public class TaskWindow extends Window {
         tfName.setCaption("Task name");
         tfDescription.setCaption("Description");
         cbAssignedUser.setCaption("Assigned user");
+        cbAssignedUser.setItemCaptionGenerator( user -> user.getName());
         bSave.setCaption(create
                 ? "Create"
                 : "Save");
