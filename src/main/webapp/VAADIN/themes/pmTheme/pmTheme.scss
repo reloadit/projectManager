@@ -1,0 +1,9 @@
+@import "../valo/valo.scss";
+
+@mixin pmTheme {
+    @include valo;
+
+    .v-caption-pm-task-label{
+        display: contents !important;
+    }
+}

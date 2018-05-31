@@ -1,0 +1,6 @@
+@import "addons.scss";
+@import "pmTheme.scss";
+.pmTheme{
+    @include addons;
+    @include pmTheme;
+}
