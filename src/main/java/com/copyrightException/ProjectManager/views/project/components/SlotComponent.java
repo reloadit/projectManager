@@ -2,12 +2,14 @@ package com.copyrightException.ProjectManager.views.project.components;
 
 import com.copyrightException.ProjectManager.entities.Slot;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.shared.ui.dnd.EffectAllowed;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.dnd.DragSourceExtension;
 import com.vaadin.ui.themes.ValoTheme;
 
 public class SlotComponent extends Panel {
@@ -41,7 +43,11 @@ public class SlotComponent extends Panel {
         nameLayout.setWidth("100%");
         layout.addComponent(nameLayout);
         slot.getTasks().forEach(task -> {
-            layout.addComponent(new TaskComponent(task, taskChangeListener));
+            final TaskComponent taskComponent = new TaskComponent(task, taskChangeListener);
+            DragSourceExtension<TaskComponent> dragSourceExtension = new DragSourceExtension<>(taskComponent);
+            dragSourceExtension.setEffectAllowed(EffectAllowed.MOVE);
+            dragSourceExtension.setDragData(task);
+            layout.addComponent(taskComponent);
         });
         layout.addComponent(bAdd);
         layout.setComponentAlignment(bAdd, Alignment.MIDDLE_CENTER);
@@ -73,8 +79,8 @@ public class SlotComponent extends Panel {
     private void onSlotNameChanged(final String name) {
         slotChangedCallback.nameChanged(slot, name);
     }
-    
-    private void onAddTask(){
+
+    private void onAddTask() {
         slotChangedCallback.addNewTask(slot);
     }
 

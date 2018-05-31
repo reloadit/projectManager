@@ -109,6 +109,20 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
         });
     }
 
+    public void moveTask(final Task task, final Slot moveTarget) {
+        LOG.info(String.format("Task: %s dropped on slot: %s#", task.getName(), moveTarget.getName()));
+        final Slot oldSlot = task.getSlot();
+        oldSlot.getTasks().remove(task);
+        task.setSlot(moveTarget);
+        moveTarget.getTasks().add(task);
+        taskRepository.saveAndFlush(task);
+        slotRepository.save(moveTarget);
+        slotRepository.save(oldSlot)                ;
+        slotRepository.flush();
+        view.setProject(project);
+        fireChangeEvent();
+    }
+
     @Override
     public void deleteTask(Task task) {
         final List<Task> tasks = task.getSlot().getTasks();

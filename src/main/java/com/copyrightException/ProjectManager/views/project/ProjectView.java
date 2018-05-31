@@ -16,6 +16,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
+import com.vaadin.shared.ui.dnd.DropEffect;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -25,6 +26,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.dnd.DropTargetExtension;
 import com.vaadin.ui.themes.ValoTheme;
 import java.util.List;
 import java.util.function.Consumer;
@@ -115,6 +117,14 @@ public class ProjectView extends VerticalLayout implements View {
         layoutSlots.removeAllComponents();
         project.getSlots().forEach(slot -> {
             final SlotComponent component = new SlotComponent(slot, presenter, presenter);
+            final DropTargetExtension<SlotComponent> dropTarget = new DropTargetExtension<>(component);
+            dropTarget.setDropEffect(DropEffect.MOVE);
+            dropTarget.addDropListener(event -> {
+                LOG.info(String.format("Drop event, drag data: %s", event.getDragData().orElse(null)));
+                event.getDragData()
+                        .filter(obj -> obj instanceof Task)
+                        .ifPresent(obj -> presenter.moveTask((Task) obj, slot));
+            });
             layoutSlots.addComponent(component);
         });
         layoutSlots.addComponent(bAddSlot);
