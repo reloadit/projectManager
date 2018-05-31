@@ -2,9 +2,7 @@ package com.copyrightException.ProjectManager.views.project.components;
 
 import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.entities.User;
-import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
-import com.vaadin.data.ValidationException;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.Page;

@@ -34,7 +34,7 @@ public class Project {
     public String getName() {
         return name;
     }
-
+    
     @OneToMany(mappedBy = "project", fetch=FetchType.EAGER)
     public List<Slot> getSlots() {
         return slots;

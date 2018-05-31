@@ -14,6 +14,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
@@ -21,6 +22,8 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import java.awt.Color;
+import javax.swing.text.StyleConstants;
 import org.bouncycastle.jcajce.provider.digest.SHA3;
 import org.bouncycastle.util.encoders.Hex;
 import org.slf4j.Logger;
@@ -59,7 +62,7 @@ public class LoginView extends VerticalLayout implements View {
 
         tfName.setPlaceholder("enter here");
         pfPassword.setPlaceholder("enter here");
-        
+
         tfName.focus();
 
         tfName.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
@@ -91,10 +94,14 @@ public class LoginView extends VerticalLayout implements View {
         grid.addComponent(pfPassword, 1, 1);
         grid.addComponent(bLogin, 1, 2);
         grid.addComponent(bRegister, 1, 4);
-
+        
+        //src/main/webapp/WEB-INF/images/loginBgImage.jpg
+        
         addComponent(grid);
         setSizeFull();
         setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
+
+        grid.addStyleName(".backgroundimage");        
     }
 
     private void initUi() {
