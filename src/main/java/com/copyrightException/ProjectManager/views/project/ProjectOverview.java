@@ -59,10 +59,10 @@ public class ProjectOverview extends VerticalLayout implements View {
     }
 
     private void initGrid() {
-        gProject.addColumn(Project::getName).setCaption("Project");
-        gProject.addColumn(project -> project.getCreator().getName()).setCaption("Creator");
-        gProject.addColumn(p -> "Show Details", new ButtonRenderer(event -> openProject(event.getItem())));
-        gProject.addColumn(p -> "Edit", new ButtonRenderer(event -> editProject(event.getItem())));
+        gProject.addColumn(Project::getName).setCaption("Project").setExpandRatio(4);
+        gProject.addColumn(project -> project.getCreator().getName()).setCaption("Creator").setExpandRatio(4);
+        gProject.addColumn(p -> "Show Details", new ButtonRenderer(event -> openProject(event.getItem()))).setExpandRatio(1).setStyleGenerator(item -> "v-align-center");
+        gProject.addColumn(p -> "Edit", new ButtonRenderer(event -> editProject(event.getItem()))).setExpandRatio(1).setStyleGenerator(item -> "v-align-center");
     }
 
     private void initUi() {

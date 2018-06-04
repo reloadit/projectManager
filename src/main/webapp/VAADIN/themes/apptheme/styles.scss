@@ -1,0 +1,6 @@
+@import "addons.scss";
+@import "apptheme.scss";
+.apptheme{
+    @include addons;
+    @include apptheme;
+}

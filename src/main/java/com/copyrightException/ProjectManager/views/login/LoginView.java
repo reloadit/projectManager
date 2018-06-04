@@ -92,12 +92,12 @@ public class LoginView extends VerticalLayout implements View {
         grid.addComponent(bLogin, 1, 2);
         grid.addComponent(bRegister, 1, 4);
 
-        //src/main/webapp/WEB-INF/images/loginBgImage.jpg
         addComponent(grid);
         setSizeFull();
         setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
 
-        grid.addStyleName(".backgroundimage");
+        //Page.getCurrent().getStyles().add(".background");
+        addStyleName("background");
     }
 
     private void initUi() {

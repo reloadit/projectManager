@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringUI
-@Theme("pmTheme")
+@Theme("apptheme")
 @SpringBootApplication
 public class ProjectManagerApplication extends UI {
 

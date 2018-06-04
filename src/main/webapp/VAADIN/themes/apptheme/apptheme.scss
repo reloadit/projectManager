@@ -1,0 +1,18 @@
+@import "../valo/valo.scss";
+
+@mixin apptheme {
+    @include valo;
+
+    .v-caption-pm-task-label{
+        display: contents !important;
+    }
+
+    .background {
+        background: url('images/bg.jpg');
+        background-color: transparent;
+    }
+
+    .v-align-center {
+        text-align: center;
+    }
+}

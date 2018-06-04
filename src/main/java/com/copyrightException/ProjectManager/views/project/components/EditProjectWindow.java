@@ -85,8 +85,15 @@ public class EditProjectWindow extends Window {
             tfProjectName.setValue(project.getName());
         }
 
-        tfProjectName.focus();
+        for (int i = 0; i < allUser.size(); i++) {
+            System.out.println("for success --- " + project.getUsers().size() + " - " + allUser.size());
+            if (project.getUsers().contains(allUser.get(i))) {
+                System.out.println("for success, if success --- " + project.getUsers().size() + " - " + allUser.size());
+                selectMemberGrid.select(allUser.get(i));
+            }
+        }
 
+        tfProjectName.focus();
         tfProjectName.addShortcutListener(new ShortcutListener("onEnter", ShortcutAction.KeyCode.ENTER, null) {
             @Override
             public void handleAction(Object sender, Object target) {
@@ -103,8 +110,8 @@ public class EditProjectWindow extends Window {
             Helper.displayErrorMessage("Empty Project Name", "Please enter a name for the project", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
             return;
         }
-        System.out.println("selected users: " + selectMemberGrid.getSelectedItems());
 
+        members.clear();
         members.addAll(selectMemberGrid.getSelectedItems());
 
         project.setName(tfProjectName.getValue());
@@ -114,7 +121,7 @@ public class EditProjectWindow extends Window {
 
         this.close();
 
-        Helper.displayErrorMessage("Updated proect successful", "The project \"" + project.getName() + "\" has been updated successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
+        Helper.displayErrorMessage("Updated project successful", "The project \"" + project.getName() + "\" has been updated successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
     }
 
     private void onCancel() {
