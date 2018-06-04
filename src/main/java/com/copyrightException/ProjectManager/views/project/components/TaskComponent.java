@@ -2,6 +2,7 @@ package com.copyrightException.ProjectManager.views.project.components;
 
 import com.copyrightException.ProjectManager.entities.Task;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -47,11 +48,14 @@ public class TaskComponent extends Panel {
         bDelete.addStyleName(ValoTheme.BUTTON_SMALL);
         bDelete.addClickListener(event -> taskChangeListener.deleteTask(task));
 
-        laName.setValue(task.getName());
-        laName.addStyleName("pm-task-label");
-        laName.setIcon(task.getDone()
-                ? VaadinIcons.CHECK
-                : null);
+        laName.setContentMode(ContentMode.HTML);
+        laName.setValue((task.getDone()
+                ? VaadinIcons.CHECK.getHtml()+" "
+                : "") + task.getName());
+//        laName.addStyleName("pm-task-label");
+//        laName.setIcon(task.getDone()
+//                ? VaadinIcons.CHECK
+//                : null);
         laName.setWidth("100%");
         ladescription.setValue(task.getDescription());
         laUser.setValue(task.getAssignedUser() != null

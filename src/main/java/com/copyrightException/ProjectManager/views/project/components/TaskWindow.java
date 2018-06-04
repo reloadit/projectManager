@@ -11,6 +11,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -55,7 +56,9 @@ public class TaskWindow extends Window {
     }
 
     private void initLayout() {
-        final FormLayout formLayout = new FormLayout(tfName, tfDescription, cbAssignedUser, chbDone);
+        final CssLayout cssLayout = new CssLayout(chbDone);
+        cssLayout.setCaption("Done");
+        final FormLayout formLayout = new FormLayout(tfName, tfDescription, cbAssignedUser, cssLayout);
         final HorizontalLayout buttonLayout = new HorizontalLayout(bSave, bCancel);
         final VerticalLayout layout = new VerticalLayout(formLayout, buttonLayout);
         layout.setComponentAlignment(buttonLayout, Alignment.MIDDLE_RIGHT);
@@ -71,7 +74,6 @@ public class TaskWindow extends Window {
         tfDescription.setCaption("Description");
         cbAssignedUser.setCaption("Assigned user");
         cbAssignedUser.setItemCaptionGenerator(user -> user.getName());
-        chbDone.setCaption("Done");
         bSave.setCaption(create
                 ? "Create"
                 : "Save");
