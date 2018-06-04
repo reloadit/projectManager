@@ -48,6 +48,10 @@ public class TaskComponent extends Panel {
         bDelete.addClickListener(event -> taskChangeListener.deleteTask(task));
 
         laName.setValue(task.getName());
+        laName.addStyleName("pm-task-label");
+        laName.setIcon(task.getDone()
+                ? VaadinIcons.CHECK
+                : null);
         laName.setWidth("100%");
         ladescription.setValue(task.getDescription());
         laUser.setValue(task.getAssignedUser() != null

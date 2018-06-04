@@ -9,6 +9,7 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -29,6 +30,7 @@ public class TaskWindow extends Window {
     private final Button bSave = new Button();
     private final Button bCancel = new Button();
     private final TextField tfName = new TextField();
+    private final CheckBox chbDone = new CheckBox();
     private final Consumer<Task> taskCallback;
     private final Binder<Task> binder = new Binder();
     private final Task task;
@@ -53,7 +55,7 @@ public class TaskWindow extends Window {
     }
 
     private void initLayout() {
-        final FormLayout formLayout = new FormLayout(tfName, tfDescription, cbAssignedUser);
+        final FormLayout formLayout = new FormLayout(tfName, tfDescription, cbAssignedUser, chbDone);
         final HorizontalLayout buttonLayout = new HorizontalLayout(bSave, bCancel);
         final VerticalLayout layout = new VerticalLayout(formLayout, buttonLayout);
         layout.setComponentAlignment(buttonLayout, Alignment.MIDDLE_RIGHT);
@@ -68,7 +70,8 @@ public class TaskWindow extends Window {
         tfName.setCaption("Task name");
         tfDescription.setCaption("Description");
         cbAssignedUser.setCaption("Assigned user");
-        cbAssignedUser.setItemCaptionGenerator( user -> user.getName());
+        cbAssignedUser.setItemCaptionGenerator(user -> user.getName());
+        chbDone.setCaption("Done");
         bSave.setCaption(create
                 ? "Create"
                 : "Save");
@@ -98,6 +101,8 @@ public class TaskWindow extends Window {
                 .bind(Task::getDescription, Task::setDescription);
         binder.forField(cbAssignedUser)
                 .bind(Task::getAssignedUser, Task::setAssignedUser);
+        binder.forField(chbDone)
+                .bind(Task::getDone, Task::setDone);
     }
 
     private void onCreateProject() {

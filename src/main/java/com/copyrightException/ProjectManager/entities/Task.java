@@ -18,6 +18,7 @@ public class Task {
     private int position;
     private User assignedUser;
     private Slot slot;
+    private Boolean done;
 
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -53,6 +54,15 @@ public class Task {
         return slot;
     }
 
+    @Column(name = "taskDone")
+    public Boolean getDone() {
+        return done;
+    }
+
+    public void setDone(Boolean done) {
+        this.done = done;
+    }
+    
     public void setId(String id) {
         this.id = id;
     }
