@@ -7,9 +7,19 @@
         display: contents !important;
     }
 
-    .background {
+    .v-imageBG-transparentBG {
         background: url('images/bg.jpg');
         background-color: transparent;
+    }
+
+    .v-white65PercentBG-roundCorners {
+        background-color: rgba(255, 255, 255, 0.65);
+        border-radius: 15px;
+    }
+
+    .v-textfield-bold-17px {
+        font-size: 17px;
+        font-weight: bold;
     }
 
     .v-align-center {

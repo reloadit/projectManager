@@ -70,6 +70,16 @@ public class RegisterView extends VerticalLayout implements View {
 
         bBack.setIcon(VaadinIcons.ARROW_LEFT);
 
+        lUsernameTitle.addStyleName("v-textfield-bold-17px");
+        lFirstNameTitle.addStyleName("v-textfield-bold-17px");
+        lLastNameTitle.addStyleName("v-textfield-bold-17px");
+        lPasswordTitle.addStyleName("v-textfield-bold-17px");
+        lRepeatPasswordTitle.addStyleName("v-textfield-bold-17px");
+        pfPassword.addStyleName("v-textfield-bold-17px");
+        pfRepeatPassword.addStyleName("v-textfield-bold-17px");
+        bBack.addStyleName("v-textfield-bold-17px");
+        bRegister.addStyleName("v-textfield-bold-17px");
+
         tfUserName.setPlaceholder("enter here");
         tfFirstname.setPlaceholder("enter here");
         tfLastname.setPlaceholder("enter here");
@@ -118,6 +128,7 @@ public class RegisterView extends VerticalLayout implements View {
     private void initLayout() {
         GridLayout grid = new GridLayout(4, 9);
         grid.setSpacing(true);
+        grid.setMargin(true);
         grid.addComponent(bBack, 1, 0);
         grid.addComponent(lUsernameTitle, 0, 2);
         grid.addComponent(lFirstNameTitle, 0, 3);
@@ -135,6 +146,10 @@ public class RegisterView extends VerticalLayout implements View {
         grid.setComponentAlignment(lRepeatPasswordTitle, Alignment.MIDDLE_RIGHT);
         grid.addComponent(pfRepeatPassword, 1, 6);
         grid.addComponent(bRegister, 1, 8);
+
+        grid.addStyleName("v-white65PercentBG-roundCorners");
+
+        addStyleName("v-imageBG-transparentBG");
 
         addComponent(grid);
         setSizeFull();

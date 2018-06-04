@@ -56,7 +56,14 @@ public class LoginView extends VerticalLayout implements View {
 
         bLogin.addStyleName(ValoTheme.BUTTON_PRIMARY);
         bRegister.addStyleName(ValoTheme.BUTTON_QUIET);
-
+        
+        lNameTitle.addStyleName("v-textfield-bold-17px");
+        lPasswordTitle.addStyleName("v-textfield-bold-17px");
+        tfName.addStyleName("v-textfield-bold-17px");
+        pfPassword.addStyleName("v-textfield-bold-17px");
+        bLogin.addStyleName("v-textfield-bold-17px");
+        bRegister.addStyleName("v-textfield-bold-17px");
+        
         tfName.setPlaceholder("enter here");
         pfPassword.setPlaceholder("enter here");
 
@@ -83,6 +90,7 @@ public class LoginView extends VerticalLayout implements View {
     private void initLayout() {
         GridLayout grid = new GridLayout(3, 5);
         grid.setSpacing(true);
+        grid.setMargin(true);
         grid.addComponent(lNameTitle, 0, 0); //-> (x, y)
         grid.setComponentAlignment(lNameTitle, Alignment.MIDDLE_CENTER);
         grid.addComponent(tfName, 1, 0);
@@ -96,10 +104,11 @@ public class LoginView extends VerticalLayout implements View {
         setSizeFull();
         setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
 
-        //Page.getCurrent().getStyles().add(".background");
-        addStyleName("background");
+        grid.addStyleName("v-white65PercentBG-roundCorners");
+                
+        addStyleName("v-imageBG-transparentBG");
     }
-
+   
     private void initUi() {
         bLogin.addClickListener(e -> onLogin());
         bRegister.addClickListener(e -> onRegister());
