@@ -4,7 +4,6 @@ import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.entities.User;
 import com.copyrightException.ProjectManager.views.login.LoginView;
 import com.copyrightException.ProjectManager.views.project.ProjectOverview;
-import com.copyrightException.ProjectManager.views.project.ProjectOverviewPresenter;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;

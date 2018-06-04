@@ -3,6 +3,7 @@ package com.copyrightException.ProjectManager.views.project;
 import com.copyrightException.ProjectManager.entities.Project;
 import com.copyrightException.ProjectManager.repositories.ProjectRepository;
 import com.copyrightException.ProjectManager.repositories.UserRepository;
+import com.copyrightException.ProjectManager.views.project.components.EditProjectWindow;
 import com.copyrightException.ProjectManager.views.project.components.Header;
 import com.copyrightException.ProjectManager.views.project.components.ProjectCreationWindow;
 import com.copyrightException.ProjectManager.views.project.components.ProjectOverviewHeader;
@@ -60,8 +61,8 @@ public class ProjectOverview extends VerticalLayout implements View {
     private void initGrid() {
         gProject.addColumn(Project::getName).setCaption("Project");
         gProject.addColumn(project -> project.getCreator().getName()).setCaption("Creator");
-        gProject.addColumn(p -> "Open", new ButtonRenderer(event -> openProject(event.getItem())))
-                .setCaption("Open");
+        gProject.addColumn(p -> "Show Details", new ButtonRenderer(event -> openProject(event.getItem())));
+        gProject.addColumn(p -> "Edit", new ButtonRenderer(event -> editProject(event.getItem())));
     }
 
     private void initUi() {
@@ -84,6 +85,19 @@ public class ProjectOverview extends VerticalLayout implements View {
             LOG.info(String.format("opening: %s", project.getName()));
             final String projectId = project.getId();
             UI.getCurrent().getNavigator().navigateTo(ProjectView.VIEW_NAME + "/project=" + projectId);
+        }
+    }
+
+    private void editProject(final Object obj) {
+        LOG.info("editProject clicked");
+        if (obj instanceof Project) {
+            final Project project = (Project) obj;
+            LOG.info(String.format("editing: %s", project.getName()));
+            final EditProjectWindow window = new EditProjectWindow(presenter::onEditProject, project, userRepository);
+            window.center();
+            window.setModal(true);
+            window.setVisible(true);
+            UI.getCurrent().addWindow(window);
         }
     }
 

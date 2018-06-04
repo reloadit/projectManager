@@ -42,6 +42,11 @@ public class ProjectOverviewPresenter {
         userRepository.saveAndFlush(user);
     }
 
+    public void onEditProject(final Project project) {
+        LOG.info(String.format("Save project: %s", project.getName()));
+        projectRepository.saveAndFlush(project);
+    }
+
     private void loadProjects() {
         view.setProjects(projectRepository.findAll());
     }
