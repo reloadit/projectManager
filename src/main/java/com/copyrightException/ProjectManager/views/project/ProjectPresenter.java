@@ -46,6 +46,9 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
                 view.projectNotFound();
             } else {
                 this.project = project;
+                project.getSlots().sort((s1, s2) -> Integer.compare(s1.getPosition(), s2.getPosition()));
+                project.getSlots().forEach(slot
+                        -> slot.getTasks().sort((t1, t2) -> Integer.compare(t1.getPosition(), t2.getPosition())));
                 view.setProject(project);
             }
         } else {
@@ -109,15 +112,33 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
         });
     }
 
+    public void swapSlot(final Slot slot1, final Slot slot2) {
+        final int index1 = slot1.getPosition();
+        final int index2 = slot2.getPosition();
+        slot1.setPosition(index2);
+        slot2.setPosition(index1);
+        project.getSlots().sort((s1, s2) -> Integer.compare(s1.getPosition(), s2.getPosition()));
+        slotRepository.save(slot1);
+        slotRepository.save(slot2);
+        slotRepository.flush();
+        view.setProject(project);
+        fireChangeEvent();
+    }
+
     public void moveTask(final Task task, final Slot moveTarget) {
         LOG.info(String.format("Task: %s dropped on slot: %s#", task.getName(), moveTarget.getName()));
         final Slot oldSlot = task.getSlot();
         oldSlot.getTasks().remove(task);
         task.setSlot(moveTarget);
         moveTarget.getTasks().add(task);
+        project.getSlots().forEach(slot -> {
+            for (int i = 0; i < slot.getTasks().size(); i++) {
+                slot.getTasks().get(i).setPosition(i);
+            }
+        });
         taskRepository.saveAndFlush(task);
         slotRepository.save(moveTarget);
-        slotRepository.save(oldSlot)                ;
+        slotRepository.save(oldSlot);
         slotRepository.flush();
         view.setProject(project);
         fireChangeEvent();

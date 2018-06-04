@@ -1,6 +1,7 @@
 package com.copyrightException.ProjectManager.views.project;
 
 import com.copyrightException.ProjectManager.entities.Project;
+import com.copyrightException.ProjectManager.entities.Slot;
 import com.copyrightException.ProjectManager.entities.Task;
 import com.copyrightException.ProjectManager.entities.User;
 import com.copyrightException.ProjectManager.repositories.ProjectRepository;
@@ -17,6 +18,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.dnd.DropEffect;
+import com.vaadin.shared.ui.dnd.EffectAllowed;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -26,6 +28,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.dnd.DragSourceExtension;
 import com.vaadin.ui.dnd.DropTargetExtension;
 import com.vaadin.ui.themes.ValoTheme;
 import java.util.List;
@@ -117,18 +120,32 @@ public class ProjectView extends VerticalLayout implements View {
         layoutSlots.removeAllComponents();
         project.getSlots().forEach(slot -> {
             final SlotComponent component = new SlotComponent(slot, presenter, presenter);
+
+            final DragSourceExtension<SlotComponent> dragSource = new DragSourceExtension<>(component);
+            dragSource.setDragData(slot);
+            dragSource.setEffectAllowed(EffectAllowed.MOVE);
+            layoutSlots.addComponent(component);
+
             final DropTargetExtension<SlotComponent> dropTarget = new DropTargetExtension<>(component);
             dropTarget.setDropEffect(DropEffect.MOVE);
             dropTarget.addDropListener(event -> {
                 LOG.info(String.format("Drop event, drag data: %s", event.getDragData().orElse(null)));
                 event.getDragData()
-                        .filter(obj -> obj instanceof Task)
-                        .ifPresent(obj -> presenter.moveTask((Task) obj, slot));
+                        .ifPresent(obj -> handleDragData(obj, slot));
             });
-            layoutSlots.addComponent(component);
         });
         layoutSlots.addComponent(bAddSlot);
         layoutSlots.setComponentAlignment(bAddSlot, Alignment.MIDDLE_CENTER);
+    }
+
+    private void handleDragData(final Object dragData, final Slot slot) {
+        if (dragData instanceof Task) {
+            presenter.moveTask((Task) dragData, slot);
+        } else if (dragData instanceof Slot) {
+            presenter.swapSlot((Slot) dragData, slot);
+        } else {
+            LOG.error(String.format("Unknown dragData: %s", dragData));
+        }
     }
 
     private void addSlot() {
