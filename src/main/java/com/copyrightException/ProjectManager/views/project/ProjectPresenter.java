@@ -1,5 +1,6 @@
 package com.copyrightException.ProjectManager.views.project;
 
+import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.ProjecManagerEventBus;
 import com.copyrightException.ProjectManager.entities.Project;
 import com.copyrightException.ProjectManager.entities.Slot;
@@ -56,6 +57,9 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
                 view.projectNotFound();
             } else {
                 this.project = project;
+                if(!project.isMember(Helper.getUser())){
+                    ui.getNavigator().navigateTo(ProjectOverview.VIEW_NAME);
+                }
                 project.getSlots().sort((s1, s2) -> Integer.compare(s1.getPosition(), s2.getPosition()));
                 project.getSlots().forEach(slot
                         -> slot.getTasks().sort((t1, t2) -> Integer.compare(t1.getPosition(), t2.getPosition())));
