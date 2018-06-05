@@ -7,7 +7,7 @@
         display: contents !important;
     }
 
-    .v-imageBG-transparentBG {
+    .v-image-transparentBG {
         background: url('images/bg.jpg');
         background-color: transparent;
     }
@@ -17,9 +17,21 @@
         border-radius: 15px;
     }
 
-    .v-textfield-bold-17px {
+    .v-text-bold-17px {
         font-size: 17px;
         font-weight: bold;
+    }
+
+    .v-text-lineThrough {
+        text-decoration: line-through;
+    }
+
+    .v-task-done-bg {
+        background: url('images/taskDoneBG.jpg');
+        background-position: center;
+        background-color: rgba(255, 255, 255, 1);
+        background-size: auto 100%;
+        background-repeat: no-repeat;
     }
 
     .v-align-center {

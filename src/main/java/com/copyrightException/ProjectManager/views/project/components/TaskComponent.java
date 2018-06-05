@@ -33,7 +33,6 @@ public class TaskComponent extends Panel {
         nameLayout.setWidth("100%");
         final VerticalLayout layout = new VerticalLayout(nameLayout, ladescription, laUser);
         setContent(layout);
-
     }
 
     private void initUi() {
@@ -49,13 +48,15 @@ public class TaskComponent extends Panel {
         bDelete.addClickListener(event -> taskChangeListener.deleteTask(task));
 
         laName.setContentMode(ContentMode.HTML);
-        laName.setValue((task.getDone()
-                ? VaadinIcons.CHECK.getHtml()+" "
-                : "") + task.getName());
-//        laName.addStyleName("pm-task-label");
-//        laName.setIcon(task.getDone()
-//                ? VaadinIcons.CHECK
-//                : null);
+        laName.setValue(task.getName());
+
+        if (task.getDone()) {
+            laName.addStyleName("v-text-lineThrough");
+            ladescription.addStyleName("v-text-lineThrough");
+            laUser.addStyleName("v-text-lineThrough");
+            addStyleName("v-task-done-bg");
+        }
+
         laName.setWidth("100%");
         ladescription.setValue(task.getDescription());
         laUser.setValue(task.getAssignedUser() != null

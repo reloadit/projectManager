@@ -70,18 +70,18 @@ public class RegisterView extends VerticalLayout implements View {
 
         bBack.setIcon(VaadinIcons.ARROW_LEFT);
 
-        tfUserName.addStyleName("v-textfield-bold-17px");
-        tfFirstname.addStyleName("v-textfield-bold-17px");
-        tfLastname.addStyleName("v-textfield-bold-17px");
-        lUsernameTitle.addStyleName("v-textfield-bold-17px");
-        lFirstNameTitle.addStyleName("v-textfield-bold-17px");
-        lLastNameTitle.addStyleName("v-textfield-bold-17px");
-        lPasswordTitle.addStyleName("v-textfield-bold-17px");
-        lRepeatPasswordTitle.addStyleName("v-textfield-bold-17px");
-        pfPassword.addStyleName("v-textfield-bold-17px");
-        pfRepeatPassword.addStyleName("v-textfield-bold-17px");
-        bBack.addStyleName("v-textfield-bold-17px");
-        bRegister.addStyleName("v-textfield-bold-17px");
+        tfUserName.addStyleName("v-text-bold-17px");
+        tfFirstname.addStyleName("v-text-bold-17px");
+        tfLastname.addStyleName("v-text-bold-17px");
+        lUsernameTitle.addStyleName("v-text-bold-17px");
+        lFirstNameTitle.addStyleName("v-text-bold-17px");
+        lLastNameTitle.addStyleName("v-text-bold-17px");
+        lPasswordTitle.addStyleName("v-text-bold-17px");
+        lRepeatPasswordTitle.addStyleName("v-text-bold-17px");
+        pfPassword.addStyleName("v-text-bold-17px");
+        pfRepeatPassword.addStyleName("v-text-bold-17px");
+        bBack.addStyleName("v-text-bold-17px");
+        bRegister.addStyleName("v-text-bold-17px");
 
         tfUserName.setPlaceholder("enter here");
         tfFirstname.setPlaceholder("enter here");
@@ -152,7 +152,7 @@ public class RegisterView extends VerticalLayout implements View {
 
         grid.addStyleName("v-white65PercentBG-roundCorners");
 
-        addStyleName("v-imageBG-transparentBG");
+        addStyleName("v-image-transparentBG");
 
         addComponent(grid);
         setSizeFull();

@@ -57,12 +57,12 @@ public class LoginView extends VerticalLayout implements View {
         bLogin.addStyleName(ValoTheme.BUTTON_PRIMARY);
         bRegister.addStyleName(ValoTheme.BUTTON_QUIET);
         
-        lNameTitle.addStyleName("v-textfield-bold-17px");
-        lPasswordTitle.addStyleName("v-textfield-bold-17px");
-        tfName.addStyleName("v-textfield-bold-17px");
-        pfPassword.addStyleName("v-textfield-bold-17px");
-        bLogin.addStyleName("v-textfield-bold-17px");
-        bRegister.addStyleName("v-textfield-bold-17px");
+        lNameTitle.addStyleName("v-text-bold-17px");
+        lPasswordTitle.addStyleName("v-text-bold-17px");
+        tfName.addStyleName("v-text-bold-17px");
+        pfPassword.addStyleName("v-text-bold-17px");
+        bLogin.addStyleName("v-text-bold-17px");
+        bRegister.addStyleName("v-text-bold-17px");
         
         tfName.setPlaceholder("enter here");
         pfPassword.setPlaceholder("enter here");
@@ -106,7 +106,7 @@ public class LoginView extends VerticalLayout implements View {
 
         grid.addStyleName("v-white65PercentBG-roundCorners");
                 
-        addStyleName("v-imageBG-transparentBG");
+        addStyleName("v-image-transparentBG");
     }
    
     private void initUi() {
