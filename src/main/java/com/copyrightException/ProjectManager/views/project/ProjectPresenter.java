@@ -8,6 +8,7 @@ import com.copyrightException.ProjectManager.repositories.ProjectRepository;
 import com.copyrightException.ProjectManager.repositories.SlotRepository;
 import com.copyrightException.ProjectManager.repositories.TaskRepository;
 import com.copyrightException.ProjectManager.repositories.UserRepository;
+import com.copyrightException.ProjectManager.views.project.components.EditProjectWindow;
 import com.copyrightException.ProjectManager.views.project.components.SlotComponent;
 import com.copyrightException.ProjectManager.views.project.components.TaskComponent;
 import com.google.common.eventbus.Subscribe;
@@ -61,9 +62,22 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
             view.projectNotFound();
         }
     }
-    
-    public void beforeLeave(){
+
+    public void beforeLeave() {
         ProjecManagerEventBus.EVENT_BUS.unregister(this);
+    }
+
+    public void onEditProject() {
+        final EditProjectWindow window = new EditProjectWindow(this::saveProject, project, userRepository);
+        window.center();
+        window.setModal(true);
+        window.setVisible(true);
+        UI.getCurrent().addWindow(window);
+    }
+
+    private void saveProject(final Project project) {
+        projectRepository.saveAndFlush(project);
+        fireChangeEvent();
     }
 
     public void addSlot(final Slot slot) {

@@ -1,5 +1,6 @@
 package com.copyrightException.ProjectManager.views.project;
 
+import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.entities.Project;
 import com.copyrightException.ProjectManager.entities.Slot;
 import com.copyrightException.ProjectManager.entities.Task;
@@ -47,6 +48,7 @@ public class ProjectView extends VerticalLayout implements View {
 
     private final Label laProjectName = new Label();
     private final Panel paHeader = new Panel();
+    private final Button bEditProject = new Button();
     private final HorizontalLayout layoutSlots = new HorizontalLayout();
     private final Button bAddSlot = new Button();
     private final Header header;
@@ -60,6 +62,7 @@ public class ProjectView extends VerticalLayout implements View {
             final TaskRepository taskRepository,
             final UserRepository userRepository) {
         presenter = new ProjectPresenter(projectRepository, slotRepository, taskRepository, userRepository);
+        bEditProject.setCaption("Edit");
         this.header = new Header(userRepository::saveAndFlush);
     }
 
@@ -68,12 +71,16 @@ public class ProjectView extends VerticalLayout implements View {
         initLayout();
         initUi();
         presenter.setView(this);
+        bEditProject.addClickListener(event -> onEdit());
     }
 
     private void initHeaderLayout() {
         final HorizontalLayout layout = new HorizontalLayout();
         layout.setMargin(true);
+        layout.setSizeFull();
         layout.addComponent(laProjectName);
+        layout.addComponent(bEditProject);
+        layout.setComponentAlignment(bEditProject, Alignment.MIDDLE_RIGHT);
         paHeader.setContent(layout);
 
         laProjectName.setCaption("Project name:");
@@ -106,6 +113,10 @@ public class ProjectView extends VerticalLayout implements View {
         presenter.onEnter(projectId);
     }
 
+    private void onEdit() {
+        presenter.onEditProject();
+    }
+
     public void projectNotFound() {
         final Notification notification = new Notification("Project not found",
                 "The project couldn't be found",
@@ -118,13 +129,14 @@ public class ProjectView extends VerticalLayout implements View {
 
     @Override
     public void beforeLeave(ViewBeforeLeaveEvent event) {
-        View.super.beforeLeave(event); 
+        View.super.beforeLeave(event);
         presenter.beforeLeave();
     }
 
     public void setProject(final Project project) {
         laProjectName.setValue(project.getName());
         layoutSlots.removeAllComponents();
+        bEditProject.setEnabled(Helper.getUser().equals(project.getCreator()));
         project.getSlots().forEach(slot -> {
             final SlotComponent component = new SlotComponent(slot, presenter, presenter);
 
