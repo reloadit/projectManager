@@ -4,6 +4,7 @@ import com.copyrightException.ProjectManager.ProjecManagerEventBus;
 import com.copyrightException.ProjectManager.entities.Project;
 import com.copyrightException.ProjectManager.entities.Slot;
 import com.copyrightException.ProjectManager.entities.Task;
+import com.copyrightException.ProjectManager.entities.User;
 import com.copyrightException.ProjectManager.repositories.ProjectRepository;
 import com.copyrightException.ProjectManager.repositories.SlotRepository;
 import com.copyrightException.ProjectManager.repositories.TaskRepository;
@@ -14,7 +15,9 @@ import com.copyrightException.ProjectManager.views.project.components.TaskCompon
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.ui.UI;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,7 +120,7 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
         final Task task = new Task();
         task.setName("");
         task.setDescription("");
-        view.showAddTaskDialog(true, task, userRepository.findAll(), t -> {
+        view.showAddTaskDialog(true, task, getMembers(), t -> {
             t.setPosition(slot.getTasks().size());
             t.setSlot(slot);
             slot.getTasks().add(t);
@@ -129,11 +132,18 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
 
     @Override
     public void editTask(Task task) {
-        view.showAddTaskDialog(false, task, userRepository.findAll(), t -> {
+        view.showAddTaskDialog(false, task, getMembers(), t -> {
             view.setProject(project);
             taskRepository.saveAndFlush(t);
             fireChangeEvent();
         });
+    }
+
+    private List<User> getMembers() {
+        final Set<User> members = new HashSet<>();
+        members.add(project.getCreator());
+        members.addAll(project.getUsers());
+        return new ArrayList<>(members);
     }
 
     public void swapSlot(final Slot slot1, final Slot slot2) {
