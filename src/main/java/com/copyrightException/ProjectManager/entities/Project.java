@@ -46,7 +46,7 @@ public class Project {
         return creator;
     }
 
-    @ManyToMany(cascade = {CascadeType.DETACH}, fetch=FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.DETACH}, fetch=FetchType.EAGER)
     @JoinTable(
             name = "Project_User",
             joinColumns = {

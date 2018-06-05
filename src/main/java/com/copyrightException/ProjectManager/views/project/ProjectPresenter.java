@@ -1,5 +1,6 @@
 package com.copyrightException.ProjectManager.views.project;
 
+import com.copyrightException.ProjectManager.ProjecManagerEventBus;
 import com.copyrightException.ProjectManager.entities.Project;
 import com.copyrightException.ProjectManager.entities.Slot;
 import com.copyrightException.ProjectManager.entities.Task;
@@ -9,6 +10,8 @@ import com.copyrightException.ProjectManager.repositories.TaskRepository;
 import com.copyrightException.ProjectManager.repositories.UserRepository;
 import com.copyrightException.ProjectManager.views.project.components.SlotComponent;
 import com.copyrightException.ProjectManager.views.project.components.TaskComponent;
+import com.google.common.eventbus.Subscribe;
+import com.vaadin.ui.UI;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -42,6 +45,7 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
     public void onEnter(final String projectId) {
         if (projectId != null) {
             final Project project = projectRepository.findFirstById(projectId);
+            ProjecManagerEventBus.EVENT_BUS.register(this);
             if (project == null) {
                 view.projectNotFound();
             } else {
@@ -151,12 +155,25 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
         for (int i = 0; i < tasks.size(); i++) {
             tasks.get(i).setPosition(i);
         }
-        view.setProject(project);
         taskRepository.delete(task);
+        view.setProject(project);
         fireChangeEvent();
     }
 
     private void fireChangeEvent() {
+        ProjecManagerEventBus.EVENT_BUS.post(project);
+    }
+
+    @Subscribe
+    public void projectChanged(final Project changedProject) {
+        LOG.info("Project Changed event");
+        if (this.project.getId().equals(changedProject.getId())) {
+            LOG.info("My Project changed.");
+            UI.getCurrent().access(() -> {
+                this.project = changedProject;
+                view.setProject(changedProject);
+            });
+        }
 
     }
 }

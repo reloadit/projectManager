@@ -1,8 +1,10 @@
 package com.copyrightException.ProjectManager;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.shared.communication.PushMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.UI;
@@ -13,6 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringUI
 @Theme("apptheme")
+@Push(PushMode.AUTOMATIC)
 @SpringBootApplication
 public class ProjectManagerApplication extends UI {
 
