@@ -86,5 +86,4 @@ public class Task {
     public void setSlot(Slot slot) {
         this.slot = slot;
     }
-
 }

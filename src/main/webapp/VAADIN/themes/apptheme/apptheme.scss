@@ -17,9 +17,25 @@
         border-radius: 15px;
     }
 
-    .v-text-bold-17px {
+    .v-blueCircleBG-whiteText-13px {
+        background-color: rgb(0, 0, 0);
+        width: 22px;
+        height: 22px;
+       // border-radius: 50%;
+        font-size: 13px;
+        color: white;
+        text-align: center;
+        align-content: center;
+    }
+
+    .v-text-bold-17px { 
         font-size: 17px;
         font-weight: bold;
+    }
+
+    .v-text-light-14px { 
+        font-size: 14px;
+        font-weight: lighter;
     }
 
     .v-text-lineThrough {
@@ -27,9 +43,8 @@
     }
 
     .v-task-done-bg {
-        background: url('images/taskDoneBG.jpg');
+        background: url('images/taskDoneBG.png');
         background-position: center;
-        background-color: rgba(255, 255, 255, 1);
         background-size: auto 100%;
         background-repeat: no-repeat;
     }

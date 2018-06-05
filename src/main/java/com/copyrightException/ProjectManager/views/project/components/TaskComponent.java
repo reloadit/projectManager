@@ -3,6 +3,7 @@ package com.copyrightException.ProjectManager.views.project.components;
 import com.copyrightException.ProjectManager.entities.Task;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -28,10 +29,18 @@ public class TaskComponent extends Panel {
     }
 
     private void initLayout() {
-        final HorizontalLayout nameLayout = new HorizontalLayout(laName, bEdit, bDelete);
-        nameLayout.setExpandRatio(laName, 1);
+        final HorizontalLayout nameLayout = new HorizontalLayout(laName, bEdit, bDelete, laUser);
+        nameLayout.setExpandRatio(laName, 8);
+        nameLayout.setExpandRatio(bEdit, 1);
+        nameLayout.setExpandRatio(bDelete, 1);
+        nameLayout.setExpandRatio(laUser, 2);
         nameLayout.setWidth("100%");
-        final VerticalLayout layout = new VerticalLayout(nameLayout, ladescription, laUser);
+        nameLayout.setComponentAlignment(laName, Alignment.TOP_CENTER);
+        nameLayout.setComponentAlignment(bEdit, Alignment.TOP_CENTER);
+        nameLayout.setComponentAlignment(bDelete, Alignment.TOP_CENTER);
+        nameLayout.setComponentAlignment(laUser, Alignment.TOP_CENTER);
+
+        final VerticalLayout layout = new VerticalLayout(nameLayout, ladescription);
         setContent(layout);
     }
 
@@ -57,10 +66,14 @@ public class TaskComponent extends Panel {
             addStyleName("v-task-done-bg");
         }
 
+        laName.addStyleName("v-text-bold-17px");
+        ladescription.addStyleName("v-text-light-14px");
+        laUser.addStyleName("v-blueCircleBG-whiteText-13px");
+
         laName.setWidth("100%");
         ladescription.setValue(task.getDescription());
         laUser.setValue(task.getAssignedUser() != null
-                ? task.getAssignedUser().getName()
+                ? task.getAssignedUser().abbrvname()
                 : "");
     }
 
