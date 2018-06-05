@@ -1,5 +1,6 @@
 package com.copyrightException.ProjectManager.views.project;
 
+import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.entities.Project;
 import com.copyrightException.ProjectManager.repositories.ProjectRepository;
 import com.copyrightException.ProjectManager.repositories.UserRepository;
@@ -10,8 +11,11 @@ import com.copyrightException.ProjectManager.views.project.components.ProjectOve
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.ButtonRenderer;
@@ -61,8 +65,20 @@ public class ProjectOverview extends VerticalLayout implements View {
     private void initGrid() {
         gProject.addColumn(Project::getName).setCaption("Project").setExpandRatio(4);
         gProject.addColumn(project -> project.getCreator().getName()).setCaption("Creator").setExpandRatio(4);
-        gProject.addColumn(p -> "Show Details", new ButtonRenderer(event -> openProject(event.getItem()))).setExpandRatio(1).setStyleGenerator(item -> "v-align-center");
-        gProject.addColumn(p -> "Edit", new ButtonRenderer(event -> editProject(event.getItem()))).setExpandRatio(1).setStyleGenerator(item -> "v-align-center");
+        gProject.addColumn(p -> "Show Details", new ButtonRenderer(event -> openProject(event.getItem()))).setExpandRatio(1).setStyleGenerator(item -> openProjectStyle((Project) item));
+        gProject.addColumn(p -> "Edit", new ButtonRenderer(event -> editProject(event.getItem()))).setExpandRatio(1).setStyleGenerator(item -> editProjectStyle((Project) item));
+    }
+
+    private String editProjectStyle(final Project project) {
+        return Helper.getUser().equals(project.getCreator())
+                ? "pm-creator"
+                : "pm-not-creator";
+    }
+
+    private String openProjectStyle(final Project project) {
+        return project.isMember(Helper.getUser())
+                ? "pm-member"
+                : "pm-not-member";
     }
 
     private void initUi() {
@@ -82,9 +98,17 @@ public class ProjectOverview extends VerticalLayout implements View {
         LOG.info("openProject clicked");
         if (obj instanceof Project) {
             final Project project = (Project) obj;
-            LOG.info(String.format("opening: %s", project.getName()));
-            final String projectId = project.getId();
-            UI.getCurrent().getNavigator().navigateTo(ProjectView.VIEW_NAME + "/project=" + projectId);
+            if (project.isMember(Helper.getUser())) {
+                LOG.info(String.format("opening: %s", project.getName()));
+                final String projectId = project.getId();
+                UI.getCurrent().getNavigator().navigateTo(ProjectView.VIEW_NAME + "/project=" + projectId);
+            } else {
+                Helper.displayErrorMessage("Cannot open project",
+                        "You must be a member to open the project. Please ask the creator of the project to add you as a member",
+                        Notification.Type.ERROR_MESSAGE,
+                        Position.TOP_CENTER,
+                        Page.getCurrent());
+            }
         }
     }
 
@@ -92,12 +116,20 @@ public class ProjectOverview extends VerticalLayout implements View {
         LOG.info("editProject clicked");
         if (obj instanceof Project) {
             final Project project = (Project) obj;
-            LOG.info(String.format("editing: %s", project.getName()));
-            final EditProjectWindow window = new EditProjectWindow(presenter::onEditProject, project, userRepository);
-            window.center();
-            window.setModal(true);
-            window.setVisible(true);
-            UI.getCurrent().addWindow(window);
+            if (Helper.getUser().equals(project.getCreator())) {
+                LOG.info(String.format("editing: %s", project.getName()));
+                final EditProjectWindow window = new EditProjectWindow(presenter::onEditProject, project, userRepository);
+                window.center();
+                window.setModal(true);
+                window.setVisible(true);
+                UI.getCurrent().addWindow(window);
+            } else {
+                Helper.displayErrorMessage("Cannot edit project",
+                        "You must be the creator of the project to edit it.",
+                        Notification.Type.ERROR_MESSAGE,
+                        Position.TOP_CENTER,
+                        Page.getCurrent());
+            }
         }
     }
 

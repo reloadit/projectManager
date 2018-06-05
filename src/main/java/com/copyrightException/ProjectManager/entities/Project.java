@@ -35,8 +35,8 @@ public class Project {
     public String getName() {
         return name;
     }
-    
-    @OneToMany(mappedBy = "project", fetch=FetchType.EAGER)
+
+    @OneToMany(mappedBy = "project", fetch = FetchType.EAGER)
     public List<Slot> getSlots() {
         return slots;
     }
@@ -47,7 +47,7 @@ public class Project {
         return creator;
     }
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.DETACH}, fetch=FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Project_User",
             joinColumns = {
@@ -77,6 +77,12 @@ public class Project {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public boolean isMember(final User user) {
+        return user != null
+                && (user.equals(creator)
+                || users.contains(user));
     }
 
     @Override

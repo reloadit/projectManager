@@ -25,4 +25,25 @@
     .v-align-center {
         text-align: center;
     }
+
+    .pm-creator{
+        text-align: center;
+    }
+
+    .pm-not-creator{
+        .v-nativebutton{
+            display:none;            
+        }
+    }
+
+    .pm-member{
+        text-align: center;
+    }
+
+    .pm-not-member{
+        .v-nativebutton{
+            display:none;
+        }
+    }
+
 }
