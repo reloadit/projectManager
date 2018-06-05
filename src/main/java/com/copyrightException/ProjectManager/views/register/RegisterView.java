@@ -70,6 +70,9 @@ public class RegisterView extends VerticalLayout implements View {
 
         bBack.setIcon(VaadinIcons.ARROW_LEFT);
 
+        tfUserName.addStyleName("v-textfield-bold-17px");
+        tfFirstname.addStyleName("v-textfield-bold-17px");
+        tfLastname.addStyleName("v-textfield-bold-17px");
         lUsernameTitle.addStyleName("v-textfield-bold-17px");
         lFirstNameTitle.addStyleName("v-textfield-bold-17px");
         lLastNameTitle.addStyleName("v-textfield-bold-17px");
