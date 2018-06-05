@@ -26,6 +26,7 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
     private final ProjectRepository projectRepository;
     private ProjectView view;
     private Project project;
+    private UI ui;
 
     public ProjectPresenter(
             final ProjectRepository projectRepository,
@@ -43,6 +44,7 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
     }
 
     public void onEnter(final String projectId) {
+        ui = UI.getCurrent();
         if (projectId != null) {
             final Project project = projectRepository.findFirstById(projectId);
             ProjecManagerEventBus.EVENT_BUS.register(this);
@@ -58,6 +60,10 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
         } else {
             view.projectNotFound();
         }
+    }
+    
+    public void beforeLeave(){
+        ProjecManagerEventBus.EVENT_BUS.unregister(this);
     }
 
     public void addSlot(final Slot slot) {
@@ -167,9 +173,9 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
     @Subscribe
     public void projectChanged(final Project changedProject) {
         LOG.info("Project Changed event");
-        if (this.project.getId().equals(changedProject.getId())) {
+        if (this.project.equals(changedProject)) {
             LOG.info("My Project changed.");
-            UI.getCurrent().access(() -> {
+            ui.access(() -> {
                 this.project = changedProject;
                 view.setProject(changedProject);
             });

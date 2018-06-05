@@ -14,6 +14,7 @@ import com.copyrightException.ProjectManager.views.project.components.SlotCreati
 import com.copyrightException.ProjectManager.views.project.components.TaskWindow;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewBeforeLeaveEvent;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
@@ -113,6 +114,12 @@ public class ProjectView extends VerticalLayout implements View {
         notification.setPosition(Position.TOP_CENTER);
         notification.show(Page.getCurrent());
         UI.getCurrent().getNavigator().navigateTo(ProjectOverview.VIEW_NAME);
+    }
+
+    @Override
+    public void beforeLeave(ViewBeforeLeaveEvent event) {
+        View.super.beforeLeave(event); 
+        presenter.beforeLeave();
     }
 
     public void setProject(final Project project) {
