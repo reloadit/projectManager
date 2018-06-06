@@ -1,6 +1,7 @@
 package com.copyrightException.ProjectManager.views.project.components;
 
 import com.copyrightException.ProjectManager.entities.Slot;
+import com.vaadin.event.MouseEvents;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.dnd.EffectAllowed;
 import com.vaadin.ui.Alignment;
@@ -44,6 +45,14 @@ public class SlotComponent extends Panel {
         layout.addComponent(nameLayout);
         slot.getTasks().forEach(task -> {
             final TaskComponent taskComponent = new TaskComponent(task, taskChangeListener);
+
+            taskComponent.addClickListener(new MouseEvents.ClickListener() {
+                @Override
+                public void click(MouseEvents.ClickEvent event) {
+                    taskComponent.editTask();
+                }
+            });
+
             DragSourceExtension<TaskComponent> dragSourceExtension = new DragSourceExtension<>(taskComponent);
             dragSourceExtension.setEffectAllowed(EffectAllowed.MOVE);
             dragSourceExtension.setDragData(task);

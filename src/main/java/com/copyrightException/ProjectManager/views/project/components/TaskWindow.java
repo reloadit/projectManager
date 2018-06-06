@@ -32,6 +32,7 @@ public class TaskWindow extends Window {
     private final Button bCancel = new Button();
     private final TextField tfName = new TextField();
     private final CheckBox chbDone = new CheckBox();
+    private final CheckBox chbDelete = new CheckBox();
     private final Consumer<Task> taskCallback;
     private final Binder<Task> binder = new Binder();
     private final Task task;
@@ -56,9 +57,11 @@ public class TaskWindow extends Window {
     }
 
     private void initLayout() {
-        final CssLayout cssLayout = new CssLayout(chbDone);
-        cssLayout.setCaption("Done");
-        final FormLayout formLayout = new FormLayout(tfName, tfDescription, cbAssignedUser, cssLayout);
+        final CssLayout doneCBCssLayout = new CssLayout(chbDone);
+        doneCBCssLayout.setCaption("Mark as done");
+        final CssLayout deleteCBCssLayout = new CssLayout(chbDelete);
+        deleteCBCssLayout.setCaption("Delete task");
+        final FormLayout formLayout = new FormLayout(tfName, tfDescription, cbAssignedUser, doneCBCssLayout, deleteCBCssLayout);
         final HorizontalLayout buttonLayout = new HorizontalLayout(bSave, bCancel);
         final VerticalLayout layout = new VerticalLayout(formLayout, buttonLayout);
         layout.setComponentAlignment(buttonLayout, Alignment.MIDDLE_RIGHT);
@@ -109,9 +112,14 @@ public class TaskWindow extends Window {
 
     private void onCreateProject() {
         try {
-            binder.writeBean(task);
-            taskCallback.accept(task);
-            this.close();
+            if (chbDelete.getValue()) {
+                //show delete window
+            } else {
+                binder.writeBean(task);
+                taskCallback.accept(task);
+                this.close();
+            }
+
         } catch (ValidationException ex) {
             LOG.error("Validation exception");
         }

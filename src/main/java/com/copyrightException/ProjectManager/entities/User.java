@@ -103,8 +103,8 @@ public class User {
 
     public String abbrvname() {
         try {
-            String firstChar = String.valueOf(firstName.charAt(0));
-            String lastChar = String.valueOf(lastName.charAt(0));
+            String firstChar = String.valueOf(firstName.charAt(0)).toUpperCase();
+            String lastChar = String.valueOf(lastName.charAt(0)).toUpperCase();
             System.out.println("returing the abbrv name of the user: firstChar + lastChar '" + firstChar + lastChar + "'");
             return firstChar + lastChar;
         } catch (Exception e) {

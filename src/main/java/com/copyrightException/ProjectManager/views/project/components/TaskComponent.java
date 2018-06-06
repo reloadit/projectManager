@@ -15,7 +15,6 @@ public class TaskComponent extends Panel {
 
     private final Task task;
     private final TaskChangeListener taskChangeListener;
-    private final Button bEdit = new Button();
     private final Button bDelete = new Button();
     private final Label laName = new Label();
     private final Label ladescription = new Label();
@@ -29,27 +28,17 @@ public class TaskComponent extends Panel {
     }
 
     private void initLayout() {
-        final HorizontalLayout nameLayout = new HorizontalLayout(laName, bEdit, bDelete, laUser);
-        nameLayout.setExpandRatio(laName, 8);
-        nameLayout.setExpandRatio(bEdit, 1);
-        nameLayout.setExpandRatio(bDelete, 1);
-        nameLayout.setExpandRatio(laUser, 2);
+        final HorizontalLayout nameLayout = new HorizontalLayout(laName, laUser);
+        nameLayout.setExpandRatio(laName, 3);
+        nameLayout.setExpandRatio(laUser, 1);
+        nameLayout.setComponentAlignment(laUser, Alignment.TOP_RIGHT);
         nameLayout.setWidth("100%");
-        nameLayout.setComponentAlignment(laName, Alignment.TOP_CENTER);
-        nameLayout.setComponentAlignment(bEdit, Alignment.TOP_CENTER);
-        nameLayout.setComponentAlignment(bDelete, Alignment.TOP_CENTER);
-        nameLayout.setComponentAlignment(laUser, Alignment.TOP_CENTER);
 
         final VerticalLayout layout = new VerticalLayout(nameLayout, ladescription);
         setContent(layout);
     }
 
     private void initUi() {
-        bEdit.setIcon(VaadinIcons.PENCIL);
-        bEdit.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-        bEdit.addStyleName(ValoTheme.BUTTON_SMALL);
-        bEdit.addClickListener(event -> taskChangeListener.editTask(task));
-
         bDelete.setIcon(VaadinIcons.MINUS_CIRCLE);
         bDelete.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         bDelete.addStyleName(ValoTheme.BUTTON_DANGER);
@@ -68,13 +57,23 @@ public class TaskComponent extends Panel {
 
         laName.addStyleName("v-text-bold-17px");
         ladescription.addStyleName("v-text-light-14px");
-        laUser.addStyleName("v-blueCircleBG-whiteText-13px");
+        laUser.addStyleName("v-blueCircleBG-whiteText-12px");
 
         laName.setWidth("100%");
+        ladescription.setWidth("100%");
         ladescription.setValue(task.getDescription());
-        laUser.setValue(task.getAssignedUser() != null
-                ? task.getAssignedUser().abbrvname()
-                : "");
+
+        if (task.getAssignedUser() != null) {
+            laUser.setValue(task.getAssignedUser().abbrvname());
+            laUser.setVisible(true);
+        } else {
+            laUser.setValue("");
+            laUser.setVisible(false);
+        }
+    }
+
+    public void editTask() {
+        taskChangeListener.editTask(task);
     }
 
     public static interface TaskChangeListener {
