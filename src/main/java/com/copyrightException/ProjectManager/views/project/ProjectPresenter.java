@@ -99,8 +99,7 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
     }
 
     @Override
-    public void nameChanged(Slot slot, String name) {
-        slot.setName(name);
+    public void slotChanged(Slot slot) {
         view.setProject(project);
         slotRepository.saveAndFlush(slot);
         fireChangeEvent();
@@ -115,6 +114,7 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
         }
         view.setProject(project);
         taskRepository.deleteInBatch(slot.getTasks());
+        slot.setTasks(new ArrayList<>());
         slotRepository.delete(slot);
         fireChangeEvent();
     }

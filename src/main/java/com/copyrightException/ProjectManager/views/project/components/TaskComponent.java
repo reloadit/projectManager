@@ -8,6 +8,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -43,7 +44,7 @@ public class TaskComponent extends Panel {
         bDelete.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         bDelete.addStyleName(ValoTheme.BUTTON_DANGER);
         bDelete.addStyleName(ValoTheme.BUTTON_SMALL);
-        bDelete.addClickListener(event -> taskChangeListener.deleteTask(task));
+        bDelete.addClickListener(event -> onDelete());
 
         laName.setContentMode(ContentMode.HTML);
         laName.setValue(task.getName());
@@ -74,6 +75,13 @@ public class TaskComponent extends Panel {
 
     public void editTask() {
         taskChangeListener.editTask(task);
+    }
+
+    private void onDelete() {
+        final ConfirmWindow confirmWindow = new ConfirmWindow(() -> taskChangeListener.deleteTask(task),
+                 "Delete slot",
+                String.format("Are you sure that you want to delete the slot: %s", task.getName()));
+        UI.getCurrent().addWindow(confirmWindow);
     }
 
     public static interface TaskChangeListener {

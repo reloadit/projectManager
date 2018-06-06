@@ -26,9 +26,19 @@ public class SlotCreationWindow extends Window {
     private final TextField tfSlotName = new TextField();
     private final Consumer<Slot> createSlotCallback;
     private final Binder<Slot> binder = new Binder();
+    private final boolean create;
+    private final Slot slot;
 
     public SlotCreationWindow(final Consumer<Slot> createSlotCallback) {
-        super("Create slot");
+        this(createSlotCallback, true, new Slot());
+    }
+
+    public SlotCreationWindow(final Consumer<Slot> createSlotCallback, final boolean create, final Slot slot) {
+        super(create
+                ? "Create slot"
+                : "Edit slot");
+        this.slot = slot;
+        this.create = create;
         this.createSlotCallback = createSlotCallback;
         initLayout();
         initUi();
@@ -50,7 +60,9 @@ public class SlotCreationWindow extends Window {
     private void initUi() {
         tfSlotName.setCaption("Slot name");
 
-        bCreateProject.setCaption("Create");
+        bCreateProject.setCaption(create
+                ? "Create"
+                : "Saves");
         bCreateProject.addStyleName(ValoTheme.BUTTON_PRIMARY);
         bCreateProject.addClickListener(event -> onCreateProject());
 
@@ -66,6 +78,9 @@ public class SlotCreationWindow extends Window {
         tfSlotName.focus();
 
         this.setResizable(false);
+        this.center();
+        this.setModal(true);
+        this.setVisible(true);
     }
 
     private void initBinder() {
@@ -75,10 +90,10 @@ public class SlotCreationWindow extends Window {
     }
 
     private void onCreateProject() {
-        final Slot project = new Slot();
+
         try {
-            binder.writeBean(project);
-            createSlotCallback.accept(project);
+            binder.writeBean(slot);
+            createSlotCallback.accept(slot);
             this.close();
         } catch (ValidationException ex) {
             LOG.error("Validation exception");

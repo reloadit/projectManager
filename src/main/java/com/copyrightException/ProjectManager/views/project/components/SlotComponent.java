@@ -9,6 +9,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.dnd.DragSourceExtension;
 import com.vaadin.ui.themes.ValoTheme;
@@ -68,6 +69,7 @@ public class SlotComponent extends Panel {
         bChangeName.setIcon(VaadinIcons.PENCIL);
         bChangeName.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         bChangeName.addStyleName(ValoTheme.BUTTON_SMALL);
+        bChangeName.addClickListener(e -> onEditSlot());
         bRemove.addClickListener(event -> onRemoveSlot());
         bRemove.setIcon(VaadinIcons.MINUS_CIRCLE);
         bRemove.addStyleName(ValoTheme.BUTTON_BORDERLESS);
@@ -81,12 +83,16 @@ public class SlotComponent extends Panel {
         setHeight("100%");
     }
 
-    private void onRemoveSlot() {
-        slotChangedCallback.removeSlot(slot);
+    private void onEditSlot() {
+        final SlotCreationWindow slotEditWindow = new SlotCreationWindow(slotChangedCallback::slotChanged, false, slot);
+        UI.getCurrent().addWindow(slotEditWindow);
     }
 
-    private void onSlotNameChanged(final String name) {
-        slotChangedCallback.nameChanged(slot, name);
+    private void onRemoveSlot() {
+        final ConfirmWindow confirmWindow = new ConfirmWindow(() -> slotChangedCallback.removeSlot(slot),
+                "Delete slot",
+                String.format("Are you sure that you want to delete the slot: %s", slot.getName()));
+        UI.getCurrent().addWindow(confirmWindow);
     }
 
     private void onAddTask() {
@@ -97,7 +103,7 @@ public class SlotComponent extends Panel {
 
         public void removeSlot(final Slot slot);
 
-        public void nameChanged(final Slot slot, final String name);
+        public void slotChanged(final Slot slot);
 
         public void addNewTask(final Slot slot);
     }
