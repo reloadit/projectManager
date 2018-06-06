@@ -37,6 +37,8 @@ public class ConfirmWindow extends Window {
         this.center();
         this.setModal(true);
         this.setVisible(true);
+        this.setResizable(false);
+        this.setDraggable(false);
     }
 
     private void initLayout() {
