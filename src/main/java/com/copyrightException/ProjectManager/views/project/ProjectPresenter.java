@@ -2,6 +2,7 @@ package com.copyrightException.ProjectManager.views.project;
 
 import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.ProjecManagerEventBus;
+import com.copyrightException.ProjectManager.ProjectDeleteEvent;
 import com.copyrightException.ProjectManager.entities.Project;
 import com.copyrightException.ProjectManager.entities.Slot;
 import com.copyrightException.ProjectManager.entities.Task;
@@ -14,11 +15,15 @@ import com.copyrightException.ProjectManager.views.project.components.EditProjec
 import com.copyrightException.ProjectManager.views.project.components.SlotComponent;
 import com.copyrightException.ProjectManager.views.project.components.TaskComponent;
 import com.google.common.eventbus.Subscribe;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,22 +63,23 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
         }
     }
 
-    private void loadProject(final String id){
-            final Project project = projectRepository.findFirstById(id);
-            if (project == null) {
-                view.projectNotFound();
-            } else {
-                this.project = project;
-                if(!project.isMember(Helper.getUser())){
-                    ui.getNavigator().navigateTo(ProjectOverview.VIEW_NAME);
-                }
-                project.getSlots().sort((s1, s2) -> Integer.compare(s1.getPosition(), s2.getPosition()));
-                project.getSlots().forEach(slot
-                        -> slot.getTasks().sort((t1, t2) -> Integer.compare(t1.getPosition(), t2.getPosition())));
-                view.setProject(project);
+    private void loadProject(final String id) {
+        final Project project = projectRepository.findFirstById(id);
+        if (project == null) {
+            view.projectNotFound();
+        } else {
+            this.project = project;
+            if (!project.isMember(Helper.getUser())) {
+                ui.getNavigator().navigateTo(ProjectOverview.VIEW_NAME);
             }
-        
+            project.getSlots().sort((s1, s2) -> Integer.compare(s1.getPosition(), s2.getPosition()));
+            project.getSlots().forEach(slot
+                    -> slot.getTasks().sort((t1, t2) -> Integer.compare(t1.getPosition(), t2.getPosition())));
+            view.setProject(project);
+        }
+
     }
+
     public void beforeLeave() {
         ProjecManagerEventBus.EVENT_BUS.unregister(this);
     }
@@ -90,9 +96,38 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
         projectRepository.saveAndFlush(project);
         fireChangeEvent();
     }
-    
-    private void deleteProject(final Project project){
-        
+
+    private void deleteProject(final Project project) {
+        final List<Task> allTask = project.getSlots().stream()
+                .flatMap(slot -> slot.getTasks().stream())
+                .collect(Collectors.toList());
+        final List<Slot> allSlots = project.getSlots();
+        final String projectId = project.getId();
+
+        allSlots.forEach(slot -> slot.setTasks(new ArrayList<>()));
+        project.setSlots(new ArrayList<>());
+        project.setUsers(new ArrayList<>());
+        taskRepository.delete(allTask);
+        taskRepository.flush();
+        slotRepository.delete(allSlots);
+        slotRepository.flush();
+        projectRepository.delete(project);
+        ProjecManagerEventBus.EVENT_BUS.post(new ProjectDeleteEvent(projectId));
+    }
+
+    @Subscribe
+    public void projectDeleted(final ProjectDeleteEvent projectDeleteEvent) {
+        ui.access(() -> {
+            if (project.getId().equals(projectDeleteEvent.getId())) {
+                Helper.displayErrorMessage(
+                        "Project deleted",
+                        "The project you were working on has been deleted by the creator (praise be uppon him).", 
+                        Notification.Type.ERROR_MESSAGE, 
+                        Position.TOP_CENTER, 
+                        Page.getCurrent());
+                ui.getNavigator().navigateTo(ProjectOverview.VIEW_NAME);
+            }
+        });
     }
 
     public void addSlot(final Slot slot) {
@@ -217,6 +252,7 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
             });
         }
     }
+
     @Subscribe
     public void userChanged(final User changedUser) {
         LOG.info("User Changed event");
