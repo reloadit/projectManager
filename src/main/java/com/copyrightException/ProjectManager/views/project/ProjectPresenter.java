@@ -79,7 +79,7 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
     }
 
     public void onEditProject() {
-        final EditProjectWindow window = new EditProjectWindow(this::saveProject, project, userRepository);
+        final EditProjectWindow window = new EditProjectWindow(this::saveProject, this::deleteProject, project, userRepository);
         window.center();
         window.setModal(true);
         window.setVisible(true);
@@ -89,6 +89,10 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
     private void saveProject(final Project project) {
         projectRepository.saveAndFlush(project);
         fireChangeEvent();
+    }
+    
+    private void deleteProject(final Project project){
+        
     }
 
     public void addSlot(final Slot slot) {

@@ -8,16 +8,15 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
-import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
@@ -37,11 +36,14 @@ public class EditProjectWindow extends Window {
     private Grid<User> selectMemberGrid;
     private final UserRepository userRepository;
     private final Consumer<Project> saveProjectCallBack;
+    private final CheckBox chbDelete = new CheckBox();
     private Project project;
     private List<User> members = new ArrayList();
+    private final Consumer<Project> deleteCallback;
 
-    public EditProjectWindow(final Consumer<Project> saveProjectCallBack, final Project project, final UserRepository userRepository) {
+    public EditProjectWindow(final Consumer<Project> saveProjectCallBack, final Consumer<Project> deleteCallback, final Project project, final UserRepository userRepository) {
         super("Edit User Profile");
+        this.deleteCallback = deleteCallback;
         this.saveProjectCallBack = saveProjectCallBack;
         this.project = project;
         this.userRepository = userRepository;
@@ -50,7 +52,7 @@ public class EditProjectWindow extends Window {
     }
 
     private void initLayout() {
-        final HorizontalLayout buttonLayout = new HorizontalLayout(bSave, bCancel);
+        final HorizontalLayout buttonLayout = new HorizontalLayout(chbDelete, bSave, bCancel);
         final VerticalLayout layout = new VerticalLayout(tfProjectName, selectMemberGrid, buttonLayout);
         layout.setComponentAlignment(buttonLayout, Alignment.MIDDLE_RIGHT);
         layout.setWidthUndefined();
@@ -62,7 +64,7 @@ public class EditProjectWindow extends Window {
     private void initUi() {
         tfProjectName = new TextField();
         tfProjectName.setCaption("Project Name");
-
+        chbDelete.setCaption("Delete");
         selectMemberGrid = new Grid<>();
         selectMemberGrid.setSelectionMode(SelectionMode.MULTI);
         List<User> allUser = new ArrayList<>();
@@ -106,22 +108,32 @@ public class EditProjectWindow extends Window {
 
     private void onSaveProject() {
 
-        if (tfProjectName.isEmpty()) {
-            Helper.displayErrorMessage("Empty Project Name", "Please enter a name for the project", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
-            return;
+        if (chbDelete.getValue()) {
+            final ConfirmWindow confirmWindow = new ConfirmWindow(() -> {
+                this.close();
+                deleteCallback.accept(project);
+            },
+                    "Delete Projekt",
+                    String.format("Are you sure that you want to delete the projekt: %s", project.getName()));
+            UI.getCurrent().addWindow(confirmWindow);
+        } else {
+            if (tfProjectName.isEmpty()) {
+                Helper.displayErrorMessage("Empty Project Name", "Please enter a name for the project", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
+                return;
+            }
+
+            members.clear();
+            members.addAll(selectMemberGrid.getSelectedItems());
+
+            project.setName(tfProjectName.getValue());
+            project.setUsers(members);
+
+            saveProjectCallBack.accept(project);
+
+            this.close();
+
+            Helper.displayErrorMessage("Updated project successful", "The project \"" + project.getName() + "\" has been updated successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
         }
-
-        members.clear();
-        members.addAll(selectMemberGrid.getSelectedItems());
-
-        project.setName(tfProjectName.getValue());
-        project.setUsers(members);
-
-        saveProjectCallBack.accept(project);
-
-        this.close();
-
-        Helper.displayErrorMessage("Updated project successful", "The project \"" + project.getName() + "\" has been updated successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
     }
 
     private void onCancel() {

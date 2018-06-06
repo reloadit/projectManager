@@ -58,6 +58,8 @@ public class ProjectOverviewPresenter {
         projectRepository.saveAndFlush(project);
         fireProjectChangedEvent(project);
     }
+    public void onDeleteProject(final Project project) {
+    }
 
     private void loadProjects() {
         view.setProjects(projectRepository.findAll());

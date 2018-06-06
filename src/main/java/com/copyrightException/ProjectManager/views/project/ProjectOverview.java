@@ -127,7 +127,7 @@ public class ProjectOverview extends VerticalLayout implements View {
             final Project project = (Project) obj;
             if (Helper.getUser().equals(project.getCreator())) {
                 LOG.info(String.format("editing: %s", project.getName()));
-                final EditProjectWindow window = new EditProjectWindow(presenter::onEditProject, project, userRepository);
+                final EditProjectWindow window = new EditProjectWindow(presenter::onEditProject, presenter::onDeleteProject, project, userRepository);
                 window.center();
                 window.setModal(true);
                 window.setVisible(true);
