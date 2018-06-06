@@ -25,7 +25,7 @@ public class ProjectOverviewHeader extends Panel {
     }
 
     private void initUi() {
-        bCreateProject.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        bCreateProject.addStyleName("v-text-bold-17px");
         bCreateProject.setCaption("Create new project");
         bCreateProject.setIcon(VaadinIcons.PLUS_CIRCLE);
         bCreateProject.addClickListener(event -> onCreateProject());

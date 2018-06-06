@@ -56,11 +56,18 @@ public class ProjectOverview extends VerticalLayout implements View {
 
     private void initLayout() {
         setSizeFull();
+        setMargin(false);
+
+        header.addStyleName("v-white55PercentBG");
+        projectOverviewHeader.addStyleName("v-white55PercentBG");
+
+        addStyleName("v-image-transparent-projectView-BG");
         addComponent(header);
         addComponent(projectOverviewHeader);
         addComponent(gProject);
         setExpandRatio(gProject, 1f);
         gProject.setSizeFull();
+        gProject.addStyleName("v-transparentBG");
     }
 
     private void initGrid() {

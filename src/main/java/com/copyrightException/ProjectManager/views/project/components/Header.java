@@ -11,6 +11,7 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
@@ -48,25 +49,28 @@ public class Header extends Panel {
         bEditProfile = new Button("Edit Profile");
         bLogout = new Button("Logout");
 
-        bEditProfile.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        bLogout.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        lName.addStyleName("v-text-bold-19px");
+        lDate.addStyleName("v-text-bold-17px");
+        bEditProfile.addStyleName("v-text-bold-17px");
+        bLogout.addStyleName("v-text-bold-17px");
+        bEditProfile.addStyleName("v-text-bold-17px");
 
         bEditProfile.setIcon(VaadinIcons.EDIT);
         bLogout.setIcon(VaadinIcons.EXIT);
     }
 
     private void initLayout() {
-        final GridLayout layout = new GridLayout(5, 1);
-        layout.setSpacing(true);
-        layout.addComponent(lName, 0, 0);
-        layout.addComponent(lDate, 1, 0);
-        layout.addComponent(bEditProfile, 3, 0);
-        layout.addComponent(bLogout, 4, 0);
-        layout.setComponentAlignment(lName, Alignment.MIDDLE_CENTER);
+        final HorizontalLayout layout = new HorizontalLayout();
+        layout.setMargin(true);
+        layout.setSizeFull();
+        layout.addComponent(lName);
+        layout.addComponent(lDate);
+        layout.addComponent(bEditProfile);
+        layout.addComponent(bLogout);
+        layout.setComponentAlignment(lName, Alignment.MIDDLE_LEFT);
         layout.setComponentAlignment(lDate, Alignment.MIDDLE_LEFT);
         layout.setComponentAlignment(bEditProfile, Alignment.MIDDLE_RIGHT);
         layout.setComponentAlignment(bLogout, Alignment.MIDDLE_RIGHT);
-        layout.setMargin(new MarginInfo(false, true, false, true));
 
         setContent(layout);
         layout.setSizeFull();

@@ -62,7 +62,7 @@ public class ProjectView extends VerticalLayout implements View {
             final TaskRepository taskRepository,
             final UserRepository userRepository) {
         presenter = new ProjectPresenter(projectRepository, slotRepository, taskRepository, userRepository);
-        bEditProject.setCaption("Edit");
+        bEditProject.setCaption("Edit Project");
         this.header = new Header(userRepository::saveAndFlush);
     }
 
@@ -84,15 +84,16 @@ public class ProjectView extends VerticalLayout implements View {
         paHeader.setContent(layout);
 
         laProjectName.setCaption("Project name:");
-        laProjectName.addStyleName(ValoTheme.LABEL_HUGE);
-        laProjectName.addStyleName(ValoTheme.LABEL_BOLD);
+        laProjectName.addStyleName("v-text-bold-19px");
+        bEditProject.addStyleName("v-text-bold-17px");
+        
+        bEditProject.setIcon(VaadinIcons.TASKS);
     }
 
     private void initLayout() {
         initHeaderLayout();
         setSizeFull();
         setMargin(false);
-        paHeader.setWidth("100%");
         
         header.addStyleName("v-white55PercentBG");
         paHeader.addStyleName("v-white55PercentBG");
@@ -108,7 +109,8 @@ public class ProjectView extends VerticalLayout implements View {
 
     private void initUi() {
         bAddSlot.setIcon(VaadinIcons.PLUS);
-        bAddSlot.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+        bAddSlot.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        bAddSlot.addStyleName("v-white55PercentBG");
         bAddSlot.addClickListener(event -> addSlot());
     }
 
