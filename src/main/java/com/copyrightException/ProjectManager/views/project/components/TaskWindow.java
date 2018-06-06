@@ -65,7 +65,10 @@ public class TaskWindow extends Window {
         doneCBCssLayout.setCaption("Mark as done");
         final CssLayout deleteCBCssLayout = new CssLayout(chbDelete);
         deleteCBCssLayout.setCaption("Delete task");
-        final FormLayout formLayout = new FormLayout(tfName, tfDescription, cbAssignedUser, doneCBCssLayout, deleteCBCssLayout);
+        final FormLayout formLayout = new FormLayout(tfName, tfDescription, cbAssignedUser, doneCBCssLayout);
+        if(!create){
+            formLayout.addComponent(deleteCBCssLayout);
+        }
         final HorizontalLayout buttonLayout = new HorizontalLayout(bSave, bCancel);
         final VerticalLayout layout = new VerticalLayout(formLayout, buttonLayout);
         layout.setComponentAlignment(buttonLayout, Alignment.MIDDLE_RIGHT);

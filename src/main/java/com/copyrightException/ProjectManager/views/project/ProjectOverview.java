@@ -3,6 +3,8 @@ package com.copyrightException.ProjectManager.views.project;
 import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.entities.Project;
 import com.copyrightException.ProjectManager.repositories.ProjectRepository;
+import com.copyrightException.ProjectManager.repositories.SlotRepository;
+import com.copyrightException.ProjectManager.repositories.TaskRepository;
 import com.copyrightException.ProjectManager.repositories.UserRepository;
 import com.copyrightException.ProjectManager.views.project.components.EditProjectWindow;
 import com.copyrightException.ProjectManager.views.project.components.Header;
@@ -39,8 +41,12 @@ public class ProjectOverview extends VerticalLayout implements View {
     private final UserRepository userRepository;
 
     @Autowired
-    public ProjectOverview(final ProjectRepository projectRepository, final UserRepository userRepository) {
-        presenter = new ProjectOverviewPresenter(projectRepository, userRepository);
+    public ProjectOverview(
+            final ProjectRepository projectRepository,
+            final TaskRepository taskRepository,
+            final SlotRepository slotRepository,
+            final UserRepository userRepository) {
+        presenter = new ProjectOverviewPresenter(projectRepository, taskRepository, slotRepository, userRepository);
         header = new Header(presenter::onEditUserProfile);
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;

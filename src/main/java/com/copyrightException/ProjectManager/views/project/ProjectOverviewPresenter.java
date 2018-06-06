@@ -2,12 +2,20 @@ package com.copyrightException.ProjectManager.views.project;
 
 import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.ProjecManagerEventBus;
+import com.copyrightException.ProjectManager.ProjectDeleteEvent;
 import com.copyrightException.ProjectManager.entities.Project;
+import com.copyrightException.ProjectManager.entities.Slot;
+import com.copyrightException.ProjectManager.entities.Task;
 import com.copyrightException.ProjectManager.entities.User;
 import com.copyrightException.ProjectManager.repositories.ProjectRepository;
+import com.copyrightException.ProjectManager.repositories.SlotRepository;
+import com.copyrightException.ProjectManager.repositories.TaskRepository;
 import com.copyrightException.ProjectManager.repositories.UserRepository;
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.ui.UI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,11 +25,19 @@ public class ProjectOverviewPresenter {
     private ProjectOverview view = null;
 
     private final ProjectRepository projectRepository;
+    private final TaskRepository taskRepository;
+    private final SlotRepository slotRepository;
     private final UserRepository userRepository;
     private UI ui;
 
-    public ProjectOverviewPresenter(ProjectRepository projectRepository, UserRepository userRepository) {
+    public ProjectOverviewPresenter(
+            final ProjectRepository projectRepository,
+            final TaskRepository taskRepository,
+            final SlotRepository slotRepository,
+            final UserRepository userRepository) {
         this.projectRepository = projectRepository;
+        this.taskRepository = taskRepository;
+        this.slotRepository = slotRepository;
         this.userRepository = userRepository;
     }
 
@@ -58,7 +74,24 @@ public class ProjectOverviewPresenter {
         projectRepository.saveAndFlush(project);
         fireProjectChangedEvent(project);
     }
+
     public void onDeleteProject(final Project project) {
+        final List<Task> allTask = project.getSlots().stream()
+                .flatMap(slot -> slot.getTasks().stream())
+                .collect(Collectors.toList());
+        final List<Slot> allSlots = project.getSlots();
+        final String projectId = project.getId();
+
+        allSlots.forEach(slot -> slot.setTasks(new ArrayList<>()));
+        project.setSlots(new ArrayList<>());
+        project.setUsers(new ArrayList<>());
+        
+        taskRepository.delete(allTask);
+        taskRepository.flush();
+        slotRepository.delete(allSlots);
+        slotRepository.flush();
+        projectRepository.delete(project);
+        ProjecManagerEventBus.EVENT_BUS.post(new ProjectDeleteEvent(projectId));
     }
 
     private void loadProjects() {
@@ -67,6 +100,13 @@ public class ProjectOverviewPresenter {
 
     private void fireProjectChangedEvent(final Project project) {
         ProjecManagerEventBus.EVENT_BUS.post(project);
+    }
+
+    @Subscribe
+    public void projectDeleted(final ProjectDeleteEvent projectDeleteEvent) {
+        ui.access(() -> {
+            loadProjects();
+        });
     }
 
     @Subscribe
