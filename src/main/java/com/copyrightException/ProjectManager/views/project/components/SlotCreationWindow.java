@@ -43,6 +43,7 @@ public class SlotCreationWindow extends Window {
         initLayout();
         initUi();
         initBinder();
+        binder.readBean(slot);
     }
 
     private void initLayout() {
