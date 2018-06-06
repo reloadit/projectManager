@@ -1,9 +1,11 @@
 package com.copyrightException.ProjectManager.views.project.components;
 
 import com.copyrightException.ProjectManager.Helper;
+import com.copyrightException.ProjectManager.ProjecManagerEventBus;
 import com.copyrightException.ProjectManager.entities.User;
 import com.copyrightException.ProjectManager.views.login.LoginView;
 import com.copyrightException.ProjectManager.views.project.ProjectOverview;
+import com.google.common.eventbus.Subscribe;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -25,8 +27,9 @@ public class Header extends Panel {
     private Button bEditProfile, bLogout;
     private Label lName, lDate;
     private final Consumer<User> userChangeCallback;
-    
-    public Header( Consumer<User>  userChangeCallback) {
+    private UI ui;
+
+    public Header(Consumer<User> userChangeCallback) {
         super();
         this.userChangeCallback = userChangeCallback;
         createComponents();
@@ -88,5 +91,23 @@ public class Header extends Panel {
         LOG.info("onLogout");
         Helper.setUser(null);
         UI.getCurrent().getNavigator().navigateTo(LoginView.VIEW_NAME);
+    }
+
+    public void viewEnter() {
+        ui = UI.getCurrent();
+        ProjecManagerEventBus.EVENT_BUS.register(this);
+    }
+
+    public void viewLeave() {
+        ProjecManagerEventBus.EVENT_BUS.unregister(this);
+    }
+
+    @Subscribe
+    public void userChanged(final User user) {
+        ui.access(() -> {
+            if (user.equals(Helper.getUser())) {
+                lName.setValue("Hello, " + user.getName() + "!");
+            }
+        });
     }
 }

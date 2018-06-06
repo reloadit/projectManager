@@ -10,6 +10,7 @@ import com.copyrightException.ProjectManager.views.project.components.ProjectCre
 import com.copyrightException.ProjectManager.views.project.components.ProjectOverviewHeader;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewBeforeLeaveEvent;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
@@ -92,6 +93,14 @@ public class ProjectOverview extends VerticalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         presenter.onViewEnter();
+        header.viewEnter();
+    }
+
+    @Override
+    public void beforeLeave(ViewBeforeLeaveEvent event) {
+        View.super.beforeLeave(event);
+        presenter.beforeLeave();
+        header.viewLeave();
     }
 
     private void openProject(final Object obj) {

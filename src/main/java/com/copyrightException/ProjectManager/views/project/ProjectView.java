@@ -118,6 +118,7 @@ public class ProjectView extends VerticalLayout implements View {
         final String projectId = event.getParameterMap().get("project");
         LOG.info(String.format("enter() project parameters: %s", projectId));
         presenter.onEnter(projectId);
+        header.viewEnter();
     }
 
     private void onEdit() {
@@ -138,6 +139,7 @@ public class ProjectView extends VerticalLayout implements View {
     public void beforeLeave(ViewBeforeLeaveEvent event) {
         View.super.beforeLeave(event);
         presenter.beforeLeave();
+        header.viewLeave();
     }
 
     public void setProject(final Project project) {

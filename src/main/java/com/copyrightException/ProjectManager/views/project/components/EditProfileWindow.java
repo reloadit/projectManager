@@ -1,6 +1,7 @@
 package com.copyrightException.ProjectManager.views.project.components;
 
 import com.copyrightException.ProjectManager.Helper;
+import com.copyrightException.ProjectManager.ProjecManagerEventBus;
 import com.copyrightException.ProjectManager.entities.User;
 import com.vaadin.data.HasValue;
 import com.vaadin.event.ShortcutAction;
@@ -205,6 +206,7 @@ public class EditProfileWindow extends Window {
         }
 
         saveUserProfileCallBack.accept(u);
+        ProjecManagerEventBus.EVENT_BUS.post(u);
 
         this.close();
 

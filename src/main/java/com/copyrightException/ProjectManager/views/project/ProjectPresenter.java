@@ -51,8 +51,15 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
     public void onEnter(final String projectId) {
         ui = UI.getCurrent();
         if (projectId != null) {
-            final Project project = projectRepository.findFirstById(projectId);
+            loadProject(projectId);
             ProjecManagerEventBus.EVENT_BUS.register(this);
+        } else {
+            view.projectNotFound();
+        }
+    }
+
+    private void loadProject(final String id){
+            final Project project = projectRepository.findFirstById(id);
             if (project == null) {
                 view.projectNotFound();
             } else {
@@ -65,11 +72,8 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
                         -> slot.getTasks().sort((t1, t2) -> Integer.compare(t1.getPosition(), t2.getPosition())));
                 view.setProject(project);
             }
-        } else {
-            view.projectNotFound();
-        }
+        
     }
-
     public void beforeLeave() {
         ProjecManagerEventBus.EVENT_BUS.unregister(this);
     }
@@ -208,6 +212,15 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
                 view.setProject(changedProject);
             });
         }
-
+    }
+    @Subscribe
+    public void userChanged(final User changedUser) {
+        LOG.info("User Changed event");
+        if (project.isMember(changedUser)) {
+            LOG.info("My Project changed.");
+            ui.access(() -> {
+                loadProject(project.getId());
+            });
+        }
     }
 }

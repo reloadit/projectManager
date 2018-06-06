@@ -19,6 +19,7 @@ public class ProjectOverviewPresenter {
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
     private UI ui;
+
     public ProjectOverviewPresenter(ProjectRepository projectRepository, UserRepository userRepository) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
@@ -30,7 +31,7 @@ public class ProjectOverviewPresenter {
 
     public void onViewEnter() {
         loadProjects();
-        ui= UI.getCurrent();
+        ui = UI.getCurrent();
         ProjecManagerEventBus.EVENT_BUS.register(this);
     }
 
@@ -73,5 +74,12 @@ public class ProjectOverviewPresenter {
                 loadProjects();
             });
         }
+    }
+
+    @Subscribe
+    public void userChanged(final User user) {
+        ui.access(() -> {
+            loadProjects();
+        });
     }
 }
