@@ -90,7 +90,7 @@ public class SlotComponent extends Panel {
 
     private void onRemoveSlot() {
         final ConfirmWindow confirmWindow = new ConfirmWindow(() -> slotChangedCallback.removeSlot(slot),
-                "Delete slot",
+                "Delete Slot",
                 String.format("Are you sure that you want to delete the slot: %s", slot.getName()));
         UI.getCurrent().addWindow(confirmWindow);
     }

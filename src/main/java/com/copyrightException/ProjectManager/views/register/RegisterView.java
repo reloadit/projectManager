@@ -152,7 +152,7 @@ public class RegisterView extends VerticalLayout implements View {
 
         grid.addStyleName("v-white65PercentBG-roundCorners");
 
-        addStyleName("v-image-transparentBG");
+        addStyleName("v-image-transparent-loginRegister-BG");
 
         addComponent(grid);
         setSizeFull();

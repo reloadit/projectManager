@@ -106,7 +106,7 @@ public class LoginView extends VerticalLayout implements View {
 
         grid.addStyleName("v-white65PercentBG-roundCorners");
                 
-        addStyleName("v-image-transparentBG");
+        addStyleName("v-image-transparent-loginRegister-BG");
     }
    
     private void initUi() {

@@ -91,7 +91,14 @@ public class ProjectView extends VerticalLayout implements View {
     private void initLayout() {
         initHeaderLayout();
         setSizeFull();
+        setMargin(false);
         paHeader.setWidth("100%");
+        
+        header.addStyleName("v-white55PercentBG");
+        paHeader.addStyleName("v-white55PercentBG");
+        
+        addStyleName("v-image-transparent-projectView-BG");
+        
         addComponent(header);
         addComponent(paHeader);
         addComponent(layoutSlots);
@@ -180,7 +187,7 @@ public class ProjectView extends VerticalLayout implements View {
             final Task task,
             final List<User> users,
             final Consumer<Task> callback) {
-        final TaskWindow window = new TaskWindow(create, task, callback, users);
+        final TaskWindow window = new TaskWindow(create, task, callback, t -> presenter.deleteTask(t), users);
         window.center();
         window.setModal(true);
         window.setVisible(true);

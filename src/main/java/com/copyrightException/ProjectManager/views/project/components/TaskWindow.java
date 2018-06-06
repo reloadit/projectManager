@@ -15,6 +15,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
@@ -33,7 +34,8 @@ public class TaskWindow extends Window {
     private final TextField tfName = new TextField();
     private final CheckBox chbDone = new CheckBox();
     private final CheckBox chbDelete = new CheckBox();
-    private final Consumer<Task> taskCallback;
+    private final Consumer<Task> createProjectCallBack;
+    private final Consumer<Task> deleteProjectCallBack;
     private final Binder<Task> binder = new Binder();
     private final Task task;
     private final boolean create;
@@ -42,11 +44,13 @@ public class TaskWindow extends Window {
             final boolean create,
             final Task task,
             final Consumer<Task> createProjectCallBack,
+            final Consumer<Task> deleteProjectCallBack,
             final List<User> users) {
         super(create
                 ? "Create task"
                 : "Edit task");
-        this.taskCallback = createProjectCallBack;
+        this.createProjectCallBack = createProjectCallBack;
+        this.deleteProjectCallBack = deleteProjectCallBack;
         this.task = task;
         this.create = create;
         cbAssignedUser.setItems(users);
@@ -113,10 +117,16 @@ public class TaskWindow extends Window {
     private void onCreateProject() {
         try {
             if (chbDelete.getValue()) {
-                //show delete window
+                final ConfirmWindow confirmWindow = new ConfirmWindow(() -> {
+                    deleteProjectCallBack.accept(task);
+                    this.close();
+                },
+                        "Delete Task",
+                        String.format("Are you sure that you want to delete the task: %s", task.getName()));
+                UI.getCurrent().addWindow(confirmWindow);
             } else {
                 binder.writeBean(task);
-                taskCallback.accept(task);
+                createProjectCallBack.accept(task);
                 this.close();
             }
 
