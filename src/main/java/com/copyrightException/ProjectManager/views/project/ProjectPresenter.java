@@ -1,6 +1,7 @@
 package com.copyrightException.ProjectManager.views.project;
 
 import com.copyrightException.ProjectManager.Helper;
+import com.copyrightException.ProjectManager.LogOffEvent;
 import com.copyrightException.ProjectManager.ProjecManagerEventBus;
 import com.copyrightException.ProjectManager.ProjectDeleteEvent;
 import com.copyrightException.ProjectManager.entities.Project;
@@ -121,12 +122,19 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
             if (project.getId().equals(projectDeleteEvent.getId())) {
                 Helper.displayErrorMessage(
                         "Project deleted",
-                        "The project you were working on has been deleted by the creator (praise be uppon him).", 
-                        Notification.Type.ERROR_MESSAGE, 
-                        Position.TOP_CENTER, 
+                        "The project you were working on has been deleted by the creator (praise be uppon him).",
+                        Notification.Type.ERROR_MESSAGE,
+                        Position.TOP_CENTER,
                         Page.getCurrent());
                 ui.getNavigator().navigateTo(ProjectOverview.VIEW_NAME);
             }
+        });
+    }
+
+    @Subscribe
+    public void userLoggedOff(final LogOffEvent logOffEvent) {
+        ui.access(()->{
+           Helper.getUser();
         });
     }
 

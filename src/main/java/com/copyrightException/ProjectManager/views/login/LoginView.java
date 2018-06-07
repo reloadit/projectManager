@@ -1,13 +1,18 @@
 package com.copyrightException.ProjectManager.views.login;
 
 import com.copyrightException.ProjectManager.Helper;
+import com.copyrightException.ProjectManager.LogInEvent;
+import com.copyrightException.ProjectManager.ProjecManagerEventBus;
 import com.copyrightException.ProjectManager.entities.User;
 import com.copyrightException.ProjectManager.repositories.UserRepository;
 import com.copyrightException.ProjectManager.views.project.ProjectOverview;
 import com.copyrightException.ProjectManager.views.register.RegisterView;
+import com.google.common.eventbus.Subscribe;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewBeforeLeaveEvent;
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
@@ -37,6 +42,7 @@ public class LoginView extends VerticalLayout implements View {
     private Label lNameTitle, lPasswordTitle;
     private TextField tfName;
     private PasswordField pfPassword;
+    private UI ui;
 
     @Autowired
     public LoginView(final UserRepository userRepository) {
@@ -56,14 +62,14 @@ public class LoginView extends VerticalLayout implements View {
 
         bLogin.addStyleName(ValoTheme.BUTTON_PRIMARY);
         bRegister.addStyleName(ValoTheme.BUTTON_QUIET);
-        
+
         lNameTitle.addStyleName("v-text-bold-17px");
         lPasswordTitle.addStyleName("v-text-bold-17px");
         tfName.addStyleName("v-text-bold-17px");
         pfPassword.addStyleName("v-text-bold-17px");
         bLogin.addStyleName("v-text-bold-17px");
         bRegister.addStyleName("v-text-bold-17px");
-        
+
         tfName.setPlaceholder("enter here");
         pfPassword.setPlaceholder("enter here");
 
@@ -105,13 +111,38 @@ public class LoginView extends VerticalLayout implements View {
         setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
 
         grid.addStyleName("v-white65PercentBG-roundCorners");
-                
+
         addStyleName("v-image-transparent-loginRegister-BG");
     }
-   
+
     private void initUi() {
         bLogin.addClickListener(e -> onLogin());
         bRegister.addClickListener(e -> onRegister());
+    }
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        View.super.enter(event);
+        ui = UI.getCurrent();
+        ProjecManagerEventBus.EVENT_BUS.register(this);
+        if (Helper.isLoggedIn()) {
+            UI.getCurrent().getNavigator().navigateTo(ProjectOverview.VIEW_NAME);
+        }
+    }
+
+    @Override
+    public void beforeLeave(ViewBeforeLeaveEvent event) {
+        View.super.beforeLeave(event);
+        ProjecManagerEventBus.EVENT_BUS.unregister(this);
+    }
+
+    @Subscribe
+    public void loggInEvent(final LogInEvent logInEvent) {
+        ui.access(() -> {
+            if (Helper.isLoggedIn()) {
+                ui.getNavigator().navigateTo(ProjectOverview.VIEW_NAME);
+            }
+        });
     }
 
     private void onLogin() {
@@ -140,6 +171,7 @@ public class LoginView extends VerticalLayout implements View {
             if (Hex.toHexString(enteredHashedPW).equals(user.getPasswortHash())) {
                 Helper.setUser(user);
                 UI.getCurrent().getNavigator().navigateTo(ProjectOverview.VIEW_NAME);
+                ProjecManagerEventBus.EVENT_BUS.post(new LogInEvent(user.getId()));
             } else {
                 Helper.displayErrorMessage("Wrong Password", "Please enter the correct password", Notification.Type.WARNING_MESSAGE, Position.TOP_CENTER, Page.getCurrent());
             }

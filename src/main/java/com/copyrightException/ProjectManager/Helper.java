@@ -24,6 +24,11 @@ public class Helper {
         UI.getCurrent().getSession().setAttribute(CURRENT_USER_PROPERTY, user);
     }
 
+    public static boolean isLoggedIn() {
+        final Object obj = UI.getCurrent().getSession().getAttribute(CURRENT_USER_PROPERTY);
+        return obj instanceof User;
+    }
+
     public static void displayErrorMessage(String title, String desc, Notification.Type type, Position pos, Page page) {
         Notification notif = new Notification(title, desc, type);
 

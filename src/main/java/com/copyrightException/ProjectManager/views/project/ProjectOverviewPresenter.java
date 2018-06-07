@@ -1,6 +1,7 @@
 package com.copyrightException.ProjectManager.views.project;
 
 import com.copyrightException.ProjectManager.Helper;
+import com.copyrightException.ProjectManager.LogOffEvent;
 import com.copyrightException.ProjectManager.ProjecManagerEventBus;
 import com.copyrightException.ProjectManager.ProjectDeleteEvent;
 import com.copyrightException.ProjectManager.entities.Project;
@@ -85,7 +86,7 @@ public class ProjectOverviewPresenter {
         allSlots.forEach(slot -> slot.setTasks(new ArrayList<>()));
         project.setSlots(new ArrayList<>());
         project.setUsers(new ArrayList<>());
-        
+
         taskRepository.delete(allTask);
         taskRepository.flush();
         slotRepository.delete(allSlots);
@@ -122,6 +123,13 @@ public class ProjectOverviewPresenter {
     public void userChanged(final User user) {
         ui.access(() -> {
             loadProjects();
+        });
+    }
+
+    @Subscribe
+    public void userLoggedOff(final LogOffEvent logOffEvent) {
+        ui.access(() -> {
+            Helper.getUser();
         });
     }
 }

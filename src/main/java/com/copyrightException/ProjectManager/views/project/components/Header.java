@@ -1,6 +1,7 @@
 package com.copyrightException.ProjectManager.views.project.components;
 
 import com.copyrightException.ProjectManager.Helper;
+import com.copyrightException.ProjectManager.LogOffEvent;
 import com.copyrightException.ProjectManager.ProjecManagerEventBus;
 import com.copyrightException.ProjectManager.entities.User;
 import com.copyrightException.ProjectManager.views.login.LoginView;
@@ -92,8 +93,10 @@ public class Header extends Panel {
 
     private void onLogout() {
         LOG.info("onLogout");
+        final String userId = Helper.getUser().getId();
         Helper.setUser(null);
         UI.getCurrent().getNavigator().navigateTo(LoginView.VIEW_NAME);
+        ProjecManagerEventBus.EVENT_BUS.post(new LogOffEvent(userId));
     }
 
     public void viewEnter() {
