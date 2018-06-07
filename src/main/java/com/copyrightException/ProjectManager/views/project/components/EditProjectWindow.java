@@ -40,9 +40,13 @@ public class EditProjectWindow extends Window {
     private Project project;
     private List<User> members = new ArrayList();
     private final Consumer<Project> deleteCallback;
+    private final boolean create;
 
-    public EditProjectWindow(final Consumer<Project> saveProjectCallBack, final Consumer<Project> deleteCallback, final Project project, final UserRepository userRepository) {
-        super("Edit User Profile");
+    public EditProjectWindow(final boolean create, final Consumer<Project> saveProjectCallBack, final Consumer<Project> deleteCallback, final Project project, final UserRepository userRepository) {
+        super(create
+                ? "Create project"
+                : "Edit project");
+        this.create = create;
         this.deleteCallback = deleteCallback;
         this.saveProjectCallBack = saveProjectCallBack;
         this.project = project;
@@ -52,9 +56,10 @@ public class EditProjectWindow extends Window {
     }
 
     private void initLayout() {
-        final HorizontalLayout buttonLayout = new HorizontalLayout(chbDelete, bSave, bCancel);
-        final VerticalLayout layout = new VerticalLayout(tfProjectName, selectMemberGrid, buttonLayout);
+        final HorizontalLayout buttonLayout = new HorizontalLayout(bSave, bCancel);
+        final VerticalLayout layout = new VerticalLayout(tfProjectName, selectMemberGrid, chbDelete, buttonLayout);
         layout.setComponentAlignment(buttonLayout, Alignment.MIDDLE_RIGHT);
+        layout.setComponentAlignment(chbDelete, Alignment.BOTTOM_LEFT);
         layout.setWidthUndefined();
         buttonLayout.setWidthUndefined();
         this.setWidthUndefined();
@@ -65,6 +70,7 @@ public class EditProjectWindow extends Window {
         tfProjectName = new TextField();
         tfProjectName.setCaption("Project Name");
         chbDelete.setCaption("Delete");
+        chbDelete.setSizeFull();
         selectMemberGrid = new Grid<>();
         selectMemberGrid.setSelectionMode(SelectionMode.MULTI);
         List<User> allUser = new ArrayList<>();
@@ -76,7 +82,9 @@ public class EditProjectWindow extends Window {
         selectMemberGrid.addColumn(User::getFirstName).setCaption("First Name");
         selectMemberGrid.addColumn(User::getLastName).setCaption("Last Name");
 
-        bSave.setCaption("Save");
+        bSave.setCaption(create
+                ? "Create"
+                : "Save");
         bSave.addStyleName(ValoTheme.BUTTON_PRIMARY);
         bSave.addClickListener(event -> onSaveProject());
 
@@ -88,9 +96,7 @@ public class EditProjectWindow extends Window {
         }
 
         for (int i = 0; i < allUser.size(); i++) {
-            System.out.println("for success --- " + project.getUsers().size() + " - " + allUser.size());
             if (project.getUsers().contains(allUser.get(i))) {
-                System.out.println("for success, if success --- " + project.getUsers().size() + " - " + allUser.size());
                 selectMemberGrid.select(allUser.get(i));
             }
         }
@@ -115,6 +121,7 @@ public class EditProjectWindow extends Window {
             },
                     "Delete Projekt",
                     String.format("Are you sure that you want to delete the projekt: %s", project.getName()));
+
             UI.getCurrent().addWindow(confirmWindow);
         } else {
             if (tfProjectName.isEmpty()) {
@@ -132,7 +139,11 @@ public class EditProjectWindow extends Window {
 
             this.close();
 
-            Helper.displayErrorMessage("Updated project successfully", "The project \"" + project.getName() + "\" has been updated successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
+            if (create) {
+                Helper.displayErrorMessage("Created project successfully", "The project \"" + project.getName() + "\" has been created successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
+            } else {
+                Helper.displayErrorMessage("Updated project successfully", "The project \"" + project.getName() + "\" has been updated successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
+            }
         }
     }
 

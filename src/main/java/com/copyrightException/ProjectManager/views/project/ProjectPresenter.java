@@ -86,7 +86,7 @@ public class ProjectPresenter implements SlotComponent.SlotChangeListener, TaskC
     }
 
     public void onEditProject() {
-        final EditProjectWindow window = new EditProjectWindow(this::saveProject, this::deleteProject, project, userRepository);
+        final EditProjectWindow window = new EditProjectWindow(false, this::saveProject, this::deleteProject, project, userRepository);
         window.center();
         window.setModal(true);
         window.setVisible(true);

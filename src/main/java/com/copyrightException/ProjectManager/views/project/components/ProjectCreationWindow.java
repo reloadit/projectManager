@@ -62,7 +62,7 @@ public class ProjectCreationWindow extends Window {
             public void handleAction(Object sender, Object target) {
                 onCreateProject();
             }
-        });
+        }); 
         tfProjectName.focus();
 
         this.setResizable(false);
