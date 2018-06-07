@@ -52,7 +52,7 @@ public class ProjectView extends VerticalLayout implements View {
     private final HorizontalLayout layoutSlots = new HorizontalLayout();
     private final Button bAddSlot = new Button();
     private final Header header;
-
+    private final Panel paSlot = new Panel();
     private final ProjectPresenter presenter;
 
     @Autowired
@@ -99,11 +99,15 @@ public class ProjectView extends VerticalLayout implements View {
         paHeader.addStyleName("v-white55PercentBG");
 
         addStyleName("v-image-transparent-projectView-BG");
-
+        
+        paSlot.addStyleName("v-invisible-panel");
+        paSlot.setContent(layoutSlots);
+        paSlot.setSizeFull();
+        
         addComponent(header);
         addComponent(paHeader);
-        addComponent(layoutSlots);
-        setExpandRatio(layoutSlots, 1);
+        addComponent(paSlot);
+        setExpandRatio(paSlot, 1);
         layoutSlots.setHeight("100%");
     }
 
