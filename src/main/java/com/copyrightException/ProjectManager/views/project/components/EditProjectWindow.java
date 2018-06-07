@@ -69,7 +69,7 @@ public class EditProjectWindow extends Window {
     private void initUi() {
         tfProjectName = new TextField();
         tfProjectName.setCaption("Project Name");
-        chbDelete.setCaption("Delete");
+        chbDelete.setCaption("Delete Project");
         chbDelete.setSizeFull();
         selectMemberGrid = new Grid<>();
         selectMemberGrid.setSelectionMode(SelectionMode.MULTI);
