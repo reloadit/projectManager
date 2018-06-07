@@ -132,4 +132,58 @@
         border: none;
         background :none;
     }
+
+    $slot-transparicy: 0.6;
+    .pm-slot-white{
+        background:rgba(255,255,255,$slot-transparicy);
+    }
+
+    .pm-slot-green{
+        background:rgba(34,139,34,$slot-transparicy);        
+    }
+
+    .pm-slot-blue{
+        background:rgba(0,0,255,$slot-transparicy);        
+    }
+
+    .pm-slot-light-blue{
+        background:rgba(0,0,150,$slot-transparicy);        
+    }
+
+    .pm-slot-yellow{
+        background:rgba(255,255,0,$slot-transparicy);        
+    }
+
+    .pm-slot-orange{
+        background:rgba(255,165,0,$slot-transparicy);        
+    }
+
+    .pm-slot-light-green{
+        background:rgba(0,255,0,$slot-transparicy);        
+
+    }
+
+    .pm-slot-amber{
+        background:rgba(255,194,0,$slot-transparicy);        
+    }
+
+    .pm-slot-prussian-blue{
+        background:rgba(0,49,83,$slot-transparicy);        
+    }
+
+    .pm-slot-aqua{
+        background:rgba(0,255,255,$slot-transparicy);        
+    }
+
+    .pm-slot-text{
+        -webkit-text-stroke-width: 0.5px;
+        -webkit-text-stroke-color: black;
+        -webkit-text-fill-color: white;
+    }
+    .pm-slot-button{
+        -webkit-text-stroke-width: 0.5px;
+        -webkit-text-stroke-color: black;
+        -webkit-text-fill-color: white;    
+        font-weight: bolder;
+    }
 }

@@ -1,8 +1,11 @@
 package com.copyrightException.ProjectManager.entities;
 
+import com.copyrightException.ProjectManager.SlotColors;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -20,6 +23,7 @@ public class Slot {
     private int position;
     private Project project;
     private List<Task> tasks;
+    private SlotColors color = SlotColors.PRUSSIAN_BLUE;
 
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -50,6 +54,12 @@ public class Slot {
         return project;
     }
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    public SlotColors getColor() {
+        return color;
+    }
+
     public void setProject(Project project) {
         this.project = project;
     }
@@ -68,6 +78,10 @@ public class Slot {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public void setColor(SlotColors color) {
+        this.color = color;
     }
 
 }

@@ -37,6 +37,9 @@ public class SlotComponent extends Panel {
         this.slotChangedCallback = slotNameChangedCallback;
         this.slot = slot;
         this.taskChangeListener = taskChangeListener;
+        if(slot.getColor() != null){
+            this.addStyleName(slot.getColor().getStyleName());
+        }
         initLayout();
         initUi();
     }
@@ -73,16 +76,21 @@ public class SlotComponent extends Panel {
         bChangeName.setIcon(VaadinIcons.PENCIL);
         bChangeName.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         bChangeName.addStyleName(ValoTheme.BUTTON_SMALL);
+        bChangeName.addStyleName("pm-slot-button");
         bChangeName.addClickListener(e -> onEditSlot());
         bRemove.addClickListener(event -> onRemoveSlot());
         bRemove.setIcon(VaadinIcons.MINUS_CIRCLE);
         bRemove.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         bRemove.addStyleName(ValoTheme.BUTTON_SMALL);
         bRemove.addStyleName(ValoTheme.BUTTON_DANGER);
+        bRemove.addStyleName("pm-slot-button");
         bAdd.setIcon(VaadinIcons.PLUS);
         bAdd.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+        bAdd.addStyleName("pm-slot-button");
         bAdd.addClickListener(event -> onAddTask());
         laName.setValue(slot.getName());
+        laName.addStyleName("v-text-bold-19px");
+        laName.addStyleName("pm-slot-text");
         setWidth("300px");
         setHeight("100%");
     }
