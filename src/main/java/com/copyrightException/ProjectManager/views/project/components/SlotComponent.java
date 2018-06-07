@@ -1,13 +1,17 @@
 package com.copyrightException.ProjectManager.views.project.components;
 
+import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.entities.Slot;
 import com.vaadin.event.MouseEvents;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.dnd.EffectAllowed;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -89,7 +93,10 @@ public class SlotComponent extends Panel {
     }
 
     private void onRemoveSlot() {
-        final ConfirmWindow confirmWindow = new ConfirmWindow(() -> slotChangedCallback.removeSlot(slot),
+        final ConfirmWindow confirmWindow = new ConfirmWindow(() -> {
+            Helper.displayErrorMessage("Deleted slot successfully", "The slot \"" + slot.getName() + "\" has been deleted successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
+            slotChangedCallback.removeSlot(slot);
+        },
                 "Delete Slot",
                 String.format("Are you sure that you want to delete the slot: %s", slot.getName()));
         UI.getCurrent().addWindow(confirmWindow);

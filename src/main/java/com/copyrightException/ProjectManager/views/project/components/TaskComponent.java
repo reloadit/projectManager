@@ -58,7 +58,7 @@ public class TaskComponent extends Panel {
 
         laName.addStyleName("v-text-bold-17px");
         ladescription.addStyleName("v-text-light-14px");
-        laUser.addStyleName("v-blueCircleBG-whiteText-12px");
+        laUser.addStyleName("v-greyCircleBG-whiteText-13px");
 
         laName.setWidth("100%");
         ladescription.setWidth("100%");

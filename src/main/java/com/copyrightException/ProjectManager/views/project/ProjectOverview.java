@@ -22,6 +22,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.ButtonRenderer;
+import com.vaadin.ui.themes.ValoTheme;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -74,11 +75,12 @@ public class ProjectOverview extends VerticalLayout implements View {
         setExpandRatio(gProject, 1f);
         gProject.setSizeFull();
         gProject.addStyleName("v-transparentBG");
+        gProject.addStyleName("v-text-bold-19px");
     }
 
     private void initGrid() {
-        gProject.addColumn(Project::getName).setCaption("Project").setExpandRatio(4);
-        gProject.addColumn(project -> project.getCreator().getName()).setCaption("Creator").setExpandRatio(4);
+        gProject.addColumn(Project::getName).setCaption("Project").setExpandRatio(4).setStyleGenerator(item -> gridTextStyle());
+        gProject.addColumn(project -> project.getCreator().getName()).setCaption("Creator").setExpandRatio(4).setStyleGenerator(item -> gridTextStyle());
         gProject.addColumn(p -> "Show Details", new ButtonRenderer(event -> openProject(event.getItem()))).setExpandRatio(1).setStyleGenerator(item -> openProjectStyle((Project) item));
         gProject.addColumn(p -> "Edit", new ButtonRenderer(event -> editProject(event.getItem()))).setExpandRatio(1).setStyleGenerator(item -> editProjectStyle((Project) item));
     }
@@ -93,6 +95,10 @@ public class ProjectOverview extends VerticalLayout implements View {
         return project.isMember(Helper.getUser())
                 ? "pm-member"
                 : "pm-not-member";
+    }
+
+    private String gridTextStyle() {
+        return "v-text-bold-17px";
     }
 
     private void initUi() {

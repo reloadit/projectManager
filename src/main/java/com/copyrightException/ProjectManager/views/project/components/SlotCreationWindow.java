@@ -97,7 +97,7 @@ public class SlotCreationWindow extends Window {
     private void onCreateSlot() {
         try {
             if (create) {
-                Helper.displayErrorMessage("Created slot successfully", "The slot \"" + slot.getName() + "\" has been created successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
+                Helper.displayErrorMessage("Created slot successfully", "The slot \"" + tfSlotName.getValue() + "\" has been created successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
             } else {
                 Helper.displayErrorMessage("Updated slot successfully", "The slot \"" + slot.getName() + "\" has been updated successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
             }

@@ -25,6 +25,7 @@
 
     .v-transparentBG {
         background-color: transparent;
+        border: none;
     }
 
     .v-white65PercentBG-roundCorners {
@@ -42,12 +43,12 @@
         border-radius: 0px;
     }
 
-    .v-blueCircleBG-whiteText-12px {
-        background-color: rgb(0, 0, 0);
-        width: 20px;
-        height: 20px;
+    .v-greyCircleBG-whiteText-13px {
+        background-color: #333333;
+        width: 22px;
+        height: 22px;
         border-radius: 50%;
-        font-size: 12px;
+        font-size: 13px;
         color: white;
         text-align: center;
     }
@@ -88,6 +89,17 @@
 
     .pm-creator{
         text-align: center;
+        .v-nativebutton{
+            background-color: transparent;
+            border: none;
+            width: 100%;
+            color: blue;
+        }
+        .v-nativebutton:hover{
+            border-radius: 5px;            
+            background-color: lightgrey;
+
+        }
     }
 
     .pm-not-creator{
@@ -98,6 +110,16 @@
 
     .pm-member{
         text-align: center;
+        .v-nativebutton{
+            background-color: transparent;
+            border: none;
+            width: 100%;
+            color: blue;
+        }
+        .v-nativebutton:hover{
+            border-radius: 5px;            
+            background-color: lightgrey;
+        }
     }
 
     .pm-not-member{
