@@ -1,15 +1,19 @@
 package com.copyrightException.ProjectManager.views.project.components;
 
+import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.entities.Slot;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -65,7 +69,7 @@ public class SlotCreationWindow extends Window {
                 ? "Create"
                 : "Saves");
         bCreateProject.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        bCreateProject.addClickListener(event -> onCreateProject());
+        bCreateProject.addClickListener(event -> onCreateSlot());
 
         bCancel.setCaption("Cancel");
         bCancel.addClickListener(event -> onCancel());
@@ -73,7 +77,7 @@ public class SlotCreationWindow extends Window {
         tfSlotName.addShortcutListener(new ShortcutListener("Create slot", ShortcutAction.KeyCode.ENTER, null) {
             @Override
             public void handleAction(Object sender, Object target) {
-                onCreateProject();
+                onCreateSlot();
             }
         });
         tfSlotName.focus();
@@ -90,9 +94,13 @@ public class SlotCreationWindow extends Window {
                 .bind(Slot::getName, Slot::setName);
     }
 
-    private void onCreateProject() {
-
+    private void onCreateSlot() {
         try {
+            if (create) {
+                Helper.displayErrorMessage("Created slot successfully", "The slot \"" + slot.getName() + "\" has been created successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
+            } else {
+                Helper.displayErrorMessage("Updated slot successfully", "The slot \"" + slot.getName() + "\" has been updated successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
+            }
             binder.writeBean(slot);
             createSlotCallback.accept(slot);
             this.close();

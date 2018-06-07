@@ -85,8 +85,8 @@ public class ProjectView extends VerticalLayout implements View {
 
         laProjectName.setCaption("Project name:");
         laProjectName.addStyleName("v-text-bold-19px");
-        bEditProject.addStyleName("v-text-bold-17px");
-        
+        bEditProject.addStyleName("v-text-17px");
+
         bEditProject.setIcon(VaadinIcons.TASKS);
     }
 
@@ -94,12 +94,12 @@ public class ProjectView extends VerticalLayout implements View {
         initHeaderLayout();
         setSizeFull();
         setMargin(false);
-        
+
         header.addStyleName("v-white55PercentBG");
         paHeader.addStyleName("v-white55PercentBG");
-        
+
         addStyleName("v-image-transparent-projectView-BG");
-        
+
         addComponent(header);
         addComponent(paHeader);
         addComponent(layoutSlots);
@@ -110,7 +110,7 @@ public class ProjectView extends VerticalLayout implements View {
     private void initUi() {
         bAddSlot.setIcon(VaadinIcons.PLUS);
         bAddSlot.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-        bAddSlot.addStyleName("v-white55PercentBG");
+        bAddSlot.addStyleName("v-white55PercentBG-slightlyRoundCorners");
         bAddSlot.addClickListener(event -> addSlot());
     }
 

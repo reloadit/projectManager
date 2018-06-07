@@ -132,7 +132,7 @@ public class EditProjectWindow extends Window {
 
             this.close();
 
-            Helper.displayErrorMessage("Updated project successful", "The project \"" + project.getName() + "\" has been updated successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
+            Helper.displayErrorMessage("Updated project successfully", "The project \"" + project.getName() + "\" has been updated successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
         }
     }
 

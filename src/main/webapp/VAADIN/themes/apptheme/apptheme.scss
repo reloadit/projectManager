@@ -32,6 +32,11 @@
         border-radius: 15px;
     }
 
+    .v-white55PercentBG-slightlyRoundCorners {
+        background-color: rgba(255, 255, 255, 0.55);
+        border-radius: 5px;
+    }
+
     .v-white55PercentBG {
         background-color: rgba(255, 255, 255, 0.55);
         border-radius: 0px;
@@ -55,6 +60,10 @@
     .v-text-bold-17px { 
         font-size: 17px;
         font-weight: bold;
+    }
+
+    .v-text-17px { 
+        font-size: 17px;
     }
 
     .v-text-light-14px { 

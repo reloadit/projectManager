@@ -210,7 +210,7 @@ public class EditProfileWindow extends Window {
 
         this.close();
 
-        Helper.displayErrorMessage("Updated user successful", "The user \"" + u.getName() + "\" has been updated successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
+        Helper.displayErrorMessage("Updated user successfully", "The user \"" + u.getName() + "\" has been updated successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
     }
 
     private void onCancel() {

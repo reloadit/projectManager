@@ -51,9 +51,8 @@ public class Header extends Panel {
 
         lName.addStyleName("v-text-bold-19px");
         lDate.addStyleName("v-text-bold-17px");
-        bEditProfile.addStyleName("v-text-bold-17px");
-        bLogout.addStyleName("v-text-bold-17px");
-        bEditProfile.addStyleName("v-text-bold-17px");
+        bEditProfile.addStyleName("v-text-17px");
+        bLogout.addStyleName("v-text-17px");
 
         bEditProfile.setIcon(VaadinIcons.EDIT);
         bLogout.setIcon(VaadinIcons.EXIT);

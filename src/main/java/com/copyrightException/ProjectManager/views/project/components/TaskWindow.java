@@ -1,5 +1,6 @@
 package com.copyrightException.ProjectManager.views.project.components;
 
+import com.copyrightException.ProjectManager.Helper;
 import com.copyrightException.ProjectManager.entities.Task;
 import com.copyrightException.ProjectManager.entities.User;
 import com.vaadin.data.Binder;
@@ -7,6 +8,8 @@ import com.vaadin.data.ValidationException;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
@@ -14,6 +17,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -66,7 +70,7 @@ public class TaskWindow extends Window {
         final CssLayout deleteCBCssLayout = new CssLayout(chbDelete);
         deleteCBCssLayout.setCaption("Delete task");
         final FormLayout formLayout = new FormLayout(tfName, tfDescription, cbAssignedUser, doneCBCssLayout);
-        if(!create){
+        if (!create) {
             formLayout.addComponent(deleteCBCssLayout);
         }
         final HorizontalLayout buttonLayout = new HorizontalLayout(bSave, bCancel);
@@ -121,6 +125,7 @@ public class TaskWindow extends Window {
         try {
             if (chbDelete.getValue()) {
                 final ConfirmWindow confirmWindow = new ConfirmWindow(() -> {
+                    Helper.displayErrorMessage("Deleted task successfully", "The task \"" + task.getName() + "\" has been deleted successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
                     deleteProjectCallBack.accept(task);
                     this.close();
                 },
@@ -130,6 +135,11 @@ public class TaskWindow extends Window {
             } else {
                 binder.writeBean(task);
                 createProjectCallBack.accept(task);
+                if (create) {
+                    Helper.displayErrorMessage("Created task successfully", "The task \"" + task.getName() + "\" has been created successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
+                } else {
+                    Helper.displayErrorMessage("Updated task successfully", "The task \"" + task.getName() + "\" has been updated successfully", Notification.Type.ASSISTIVE_NOTIFICATION, Position.TOP_CENTER, Page.getCurrent());
+                }
                 this.close();
             }
 
